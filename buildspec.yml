@@ -1,10 +1,15 @@
 version: 0.2
 
 phases:
-  post_build:
-    commands:
-      - mvn package
+    build:
+        commands:
+            - echo 'Building Services App............'
+            - mvn -Pamazon clean package
+        
 artifacts:
-  files:
-    - '**/*'
-  base-directory: 'target/PicScavAPI'
+    files: '**/*'
+    base-directory: target/PicScavAPI
+    
+cache:
+  paths:
+    - '/root/.m2/**/*'
