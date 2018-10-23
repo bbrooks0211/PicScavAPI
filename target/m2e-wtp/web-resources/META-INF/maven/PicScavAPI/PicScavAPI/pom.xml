@@ -9,100 +9,26 @@
     </properties>
 
     <!-- Build Configuration -->  
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-        <finalName>PicScavAPI</finalName>
-        <plugins>
-	       <plugin>
-	        		<artifactId>maven-compiler-plugin</artifactId>
-	        		<version>3.6.1</version>
-	        		<configuration>
-	          			<source>1.8</source>
-	          			<target>1.8</target>
-	        		</configuration>
-	      </plugin>
-	      <plugin>
-	        		<artifactId>maven-war-plugin</artifactId>
-	        		<version>3.0.0</version>
-	        		<configuration>
-	          			<warSourceDirectory>${project.basedir}/target/${warname}</warSourceDirectory>
- 	        		</configuration>
-	       </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                     <includes>
-                        <include>**/AllTests.java</include>
-                     </includes>
-                </configuration> 
-            </plugin>
-             	<plugin>
-   				<groupId>com.google.cloud.tools</groupId>
-   				<artifactId>appengine-maven-plugin</artifactId>
-   				<version>1.3.2</version>
-		</plugin>
-		<plugin>
-            		<groupId>org.apache.maven.plugins</groupId>
-            		<artifactId>maven-dependency-plugin</artifactId>
-            		<version>3.0.2</version>
-            		<executions>
-                		<execution>
-                    		<phase>package</phase>
-                    		<goals><goal>copy</goal></goals>
-                    		<configuration>
-                        		<artifactItems>
-                            			<artifactItem>
-                                			<groupId>com.github.jsimone</groupId>
-                                			<artifactId>webapp-runner</artifactId>
-                                			<version>8.5.31.0</version>
-                                			<destFileName>webapp-runner.jar</destFileName>
-                            				</artifactItem>
-                        		</artifactItems>
-                    		</configuration>
-                		</execution>
-            		</executions>
-        	</plugin>
-	</plugins>
-        <resources>
-	        <resource>
-                 <directory>src</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                    <exclude>**/config.properties</exclude> 
-                    <exclude>**/web.xml</exclude>
-                    <exclude>**/log4j.xml</exclude>
-                    <exclude>**/*.jpg</exclude>                    
-                  </excludes>
-            </resource>
-	        <resource>
-                 <directory>WebContent</directory>
-                <targetPath>${project.basedir}/target/${warname}</targetPath>
-                 <includes>
-                    <include>**/index.html</include>
-                    <include>**/WEB-INF/applicationContext.xml</include>
-                    <include>**/WEB-INF/securityContext.xml</include>
-                  </includes>
-            </resource>
-            <resource>
-                <directory>loadtest</directory>
-                <targetPath>${project.build.directory}/loadtest</targetPath>
-                <includes>
-                    <include> **/*.csv</include>
-                    <include> **/*.jmx</include>
-                </includes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>WebContent</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-        </testResources>
-    </build>
+<build>
+<sourceDirectory>src</sourceDirectory>
+<plugins>
+<plugin>
+<artifactId>maven-compiler-plugin</artifactId>
+<version>3.6.1</version>
+<configuration>
+<source>1.8</source>
+<target>1.8</target>
+</configuration>
+</plugin>
+<plugin>
+<artifactId>maven-war-plugin</artifactId>
+<version>3.0.0</version>
+<configuration>
+<warSourceDirectory>WebContent</warSourceDirectory>
+</configuration>
+</plugin>
+</plugins>
+</build>
   
   
   <!--  Dependencies  -->
