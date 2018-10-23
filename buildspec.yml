@@ -4,8 +4,7 @@ phases:
   post_build:
     commands:
       - mvn package
-      - mv target/PicScavAPI.war PicScavAPI.war
 artifacts:
   files:
-    - PicScavAPI.war
-    - .ebextensions/**/*
+    - '**/*'
+  base-directory: 'target/PicScavAPI'
