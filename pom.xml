@@ -301,13 +301,6 @@
 <artifactId>slf4j-log4j12</artifactId>
 <version>1.7.12</version>
 </dependency>
-    <dependency>
-  <groupId>com.sun</groupId>
-  <artifactId>tools</artifactId>
-  <version>1.8</version>
-  <scope>system</scope>
-  <systemPath>C:\Program Files\Java\jdk1.8.0_181\lib\tools.jar</systemPath>
-</dependency>
 </dependencies>
   
 </project>
