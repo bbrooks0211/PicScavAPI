@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-
+//meme
 @Path("/service")
 public class RestService {
 	private List<String> list = new ArrayList<String>();
