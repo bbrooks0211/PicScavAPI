@@ -119,7 +119,7 @@ public class UserDAO implements DataAccessInterface<RegistrationModel>{
 			{
 				rs.close();
 				stmt1.close();
-				return null;
+				return new UserModel();
 			}
 			
 			user = new UserModel(rs.getInt("id"), rs.getString("username"), rs.getString("email"), new ArrayList<FriendModel>(), rs.getInt("purchasedAdRemoval"));
