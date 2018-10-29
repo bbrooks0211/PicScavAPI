@@ -21,8 +21,9 @@ public class UserDAO implements DataAccessInterface<RegistrationModel>{
 	// DB Connection Info
 	Connection conn = null;
 	String url = DatabaseUtility.url;
-	String username = DatabaseUtility.username;
+	String dbUser = DatabaseUtility.username;
 	String password = DatabaseUtility.password;
+	String driver = "com.mysql.jdbc.Driver";
 
 	@Override
 	public boolean create(RegistrationModel model) {
@@ -30,10 +31,9 @@ public class UserDAO implements DataAccessInterface<RegistrationModel>{
 		// Insert
 		try 
 		{
-			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver).newInstance();
 			// Connect to the Database
-			conn = DriverManager.getConnection(url, username, password);
+			conn = DriverManager.getConnection(url, dbUser, password);
 
 			// Insert an Album
 			String sql1 = String.format("INSERT INTO  users(username, email, password) VALUES('%s', '%s', '%s')", model.getUsername(), model.getEmail(), model.getPassword());
@@ -98,16 +98,115 @@ public class UserDAO implements DataAccessInterface<RegistrationModel>{
 		return null;
 	}
 	
-	public UserModel tryLogin(LoginModel model) {
-		UserModel user = null;
+	public UserModel findByUsername(String username) {
+		UserModel user = new UserModel();
 		
-		// Insert
 		try 
 		{
-			String driver = "com.mysql.jdbc.Driver";
 			Class.forName(driver).newInstance();
 			// Connect to the Database
-			conn = DriverManager.getConnection(url, username, password);
+			conn = DriverManager.getConnection(url, dbUser, password);
+
+			String sql1 = String.format("SELECT * FROM users WHERE username='%s'", username);
+			Statement stmt1 = conn.createStatement();
+			System.out.println(sql1);
+
+			ResultSet rs = stmt1.executeQuery(sql1);
+			
+			if(!rs.next())
+			{
+				rs.close();
+				stmt1.close();
+				return new UserModel();
+			}
+			
+			user = new UserModel(rs.getInt("id"), rs.getString("username"), rs.getString("email"), new ArrayList<FriendModel>(), rs.getInt("purchasedAdRemoval"));
+			rs.close();
+			stmt1.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			//throw new DatabaseException(e);
+		}
+		finally
+		{
+			// Cleanup Database
+			if(conn != null)
+			{
+				try 
+				{
+					conn.close();
+				} 
+				catch (SQLException e) 
+				{
+					e.printStackTrace();
+					//throw new DatabaseException(e);
+				}
+			}
+		}
+		return user;
+	}
+	
+	public UserModel findByEmail(String email) {
+		UserModel user = new UserModel();
+		
+		try 
+		{
+			Class.forName(driver).newInstance();
+			// Connect to the Database
+			conn = DriverManager.getConnection(url, dbUser, password);
+
+			// Insert an Album
+			String sql1 = String.format("SELECT * FROM users WHERE email='%s'", email);
+			System.out.println(sql1);
+			Statement stmt1 = conn.createStatement();
+
+			ResultSet rs = stmt1.executeQuery(sql1);
+			
+			if(!rs.next())
+			{
+				rs.close();
+				stmt1.close();
+				return new UserModel();
+			}
+			
+			user = new UserModel(rs.getInt("id"), rs.getString("username"), rs.getString("email"), new ArrayList<FriendModel>(), rs.getInt("purchasedAdRemoval"));
+			rs.close();
+			stmt1.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			//throw new DatabaseException(e);
+		}
+		finally
+		{
+			// Cleanup Database
+			if(conn != null)
+			{
+				try 
+				{
+					conn.close();
+				} 
+				catch (SQLException e) 
+				{
+					e.printStackTrace();
+					//throw new DatabaseException(e);
+				}
+			}
+		}
+		return user;
+	}
+	
+	public UserModel tryLogin(LoginModel model) {
+		UserModel user = new UserModel();
+		
+		try 
+		{
+			Class.forName(driver).newInstance();
+			// Connect to the Database
+			conn = DriverManager.getConnection(url, dbUser, password);
 
 			// Insert an Album
 			String sql1 = String.format("SELECT * FROM users WHERE username='%s' AND password='%s'", model.getUsername(), model.getPassword());
