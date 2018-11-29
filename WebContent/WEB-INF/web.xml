@@ -26,7 +26,7 @@
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>api.brooks.RESTServices</param-value>
+      <param-value>brooks.api.RESTServices</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
@@ -34,7 +34,7 @@
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
   
-      <!-- Security for REST Services -->
+     <!-- Security for REST Services -->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
