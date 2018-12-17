@@ -268,12 +268,22 @@
     <version>1.0</version>
 </dependency>
 
-   	<dependency>
-    		<groupId>org.apache.commons</groupId>
-    		<artifactId>commons-dbcp2</artifactId>
-    		<version>2.1.1</version>
+ <dependency>
+ 		<groupId>org.apache.commons</groupId>
+ 		<artifactId>commons-dbcp2</artifactId>
+ 		<version>2.1.1</version>
+</dependency>
+	
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.2.3</version>
+</dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>jcl-over-slf4j</artifactId>
+		<version>1.7.12</version>
 	</dependency>
-
 
 </dependencies>
   
