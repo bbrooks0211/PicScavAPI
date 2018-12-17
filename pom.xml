@@ -65,6 +65,16 @@
 <version>1.8.5</version>
 </dependency>
 <dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjrt</artifactId>
+    <version>1.8.9</version>
+</dependency>
+  <dependency>
+	<groupId>org.aspectj</groupId>
+	<artifactId>aspectjtools</artifactId>
+	<version>1.8.9</version>
+ </dependency>
+<dependency>
 <groupId>javax.mail</groupId>
 <artifactId>javax.mail-api</artifactId>
 <version>1.5.2</version>
@@ -233,6 +243,38 @@
     <artifactId>commons-codec</artifactId>
     <version>1.9</version>
 </dependency>
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-orm</artifactId>
+	<version>2.5.6</version>
+</dependency>
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-aspects</artifactId>
+	<version>4.3.9.RELEASE</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-dbcp -->
+<dependency>
+    <groupId>org.apache.tomcat</groupId>
+    <artifactId>tomcat-jdbc</artifactId>
+    <version>8.5.35</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/aopalliance/aopalliance -->
+<dependency>
+    <groupId>aopalliance</groupId>
+    <artifactId>aopalliance</artifactId>
+    <version>1.0</version>
+</dependency>
+
+   	<dependency>
+    		<groupId>org.apache.commons</groupId>
+    		<artifactId>commons-dbcp2</artifactId>
+    		<version>2.1.1</version>
+	</dependency>
+
+
 </dependencies>
   
 </project>

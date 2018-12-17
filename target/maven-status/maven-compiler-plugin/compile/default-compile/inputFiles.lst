@@ -1,6 +1,8 @@
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\ApplicationConfig.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\models\LoginModel.java
+C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\RESTServices\UserRestService2.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\utility\DatabaseUtility.java
+C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\utility\interceptors\LoggingInterceptor.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\data\UserDAO.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\models\FriendModel.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\business\interfaces\UserBusinessServiceInterface.java
@@ -9,6 +11,7 @@ C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\RESTServices\RestServ
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\business\UserBusinessService.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\models\RegistrationModel.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\models\RestResponse.java
+C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\utility\exceptions\DatabaseException.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\data\interfaces\UserDataAccessInterface.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\models\UserModel.java
 C:\Users\brend\eclipse-workspace\PicScavAPI\src\brooks\api\utility\PasswordSecurityUtility.java

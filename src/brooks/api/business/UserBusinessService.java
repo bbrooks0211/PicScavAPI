@@ -113,12 +113,6 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 		return true;
 	}
 	
-	@Autowired
-	public void setUserDAO(UserDAO dao)
-	{
-		this.dao = dao;
-	}
-
 	@Override
 	public boolean updateUser(UserModel user) {
 		return dao.update(user);
@@ -127,5 +121,11 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	@Override
 	public boolean deleteUser(int id) {
 		return dao.delete(id);
+	}
+	
+	@Autowired
+	public void setUserDAO(UserDAO dao)
+	{
+		this.dao = dao;
 	}
 }
