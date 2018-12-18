@@ -17,6 +17,12 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class PasswordSecurityUtility {
 	
+	/**
+	 * Function to hash the password
+	 * @param password
+	 * @return hashedString
+	 * @throws UnsupportedEncodingException
+	 */
     public static String getHashedPassword(String password) throws UnsupportedEncodingException {
 
         String salt = "497384";

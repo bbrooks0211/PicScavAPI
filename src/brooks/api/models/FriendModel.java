@@ -7,17 +7,20 @@ package brooks.api.models;
  */
 public class FriendModel {
 	private int id;
+	private String friendUsername;
 	private String username;
 	
 	public FriendModel() {
 		this.id = -1;
 		this.username = "";
+		this.friendUsername = "";
 	}
 	
-	public FriendModel(int id, String username) {
+	public FriendModel(int id, String username, String friendUsername) {
 		super();
 		this.id = id;
 		this.username = username;
+		this.friendUsername = friendUsername;
 	}
 	
 	public int getId() {
@@ -31,6 +34,12 @@ public class FriendModel {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public String getFriendUsername() {
+		return friendUsername;
+	}
+	public void setFriendUsername(String friendUsername) {
+		this.friendUsername = friendUsername;
 	}
 	
 }

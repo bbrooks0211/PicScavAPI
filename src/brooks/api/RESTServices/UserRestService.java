@@ -21,6 +21,8 @@ import brooks.api.models.LoginModel;
 import brooks.api.models.RegistrationModel;
 import brooks.api.models.RestResponse;
 import brooks.api.models.UserModel;
+import brooks.api.utility.exceptions.EmailAlreadyExistsException;
+import brooks.api.utility.exceptions.UsernameAlreadyExistsException;
 
 /**
  * Rest service for handling all activity based around a user account
@@ -48,13 +50,14 @@ public class UserRestService {
 		
 		try {
 			status = service.registerUser(user);
+			response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			response = new RestResponse<Boolean>(0, "Connection failed", false);
+		} catch (EmailAlreadyExistsException e) {
+			response = new RestResponse<Boolean>(-1, "Email already exists", Boolean.valueOf(status));
+		} catch (UsernameAlreadyExistsException e) {
+			response = new RestResponse<Boolean>(-2, "Username already exists", Boolean.valueOf(status));
 		}
-		
-		response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
 		
 		return response;
 	}
@@ -176,8 +179,5 @@ public class UserRestService {
 	@Autowired
 	public void setUserBusinessService(UserBusinessServiceInterface service) {
 		this.service = service;
-		
-		//DELETE THIS
-		System.out.println("USER BUSINESS SERVICE AUTOWIRED");
 	} 
 }

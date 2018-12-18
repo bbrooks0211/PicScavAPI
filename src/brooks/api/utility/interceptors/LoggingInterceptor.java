@@ -5,6 +5,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ * Interceptor using Spring AOP to log all entry and exit within methods throughout the application
+ * @author Brendan Brooks
+ *
+ */
 @Aspect
 public class LoggingInterceptor {
 	
@@ -20,7 +26,7 @@ public class LoggingInterceptor {
 		logger.info("[INFO] Entering: " + packageName + "." + methodName);
 		Object output = pjp.proceed();
 		System.out.println("Exiting: " + packageName + "." + methodName);
-		logger.error("[INFO] Exiting: " + packageName + "." + methodName);
+		logger.info("[INFO] Exiting: " + packageName + "." + methodName);
 		return output;
 	}
 }

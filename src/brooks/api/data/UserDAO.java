@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -21,6 +23,7 @@ import brooks.api.models.LoginModel;
 import brooks.api.models.RegistrationModel;
 import brooks.api.models.UserModel;
 import brooks.api.utility.DatabaseUtility;
+import brooks.api.utility.interceptors.LoggingInterceptor;
 
 /**
  * Data Access Service for users. 
@@ -32,6 +35,8 @@ public class UserDAO implements UserDataAccessInterface{
 	@SuppressWarnings("unused")
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
+	
+	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 	
 	/**
 	 * @param t - RegistrationModel
@@ -48,6 +53,7 @@ public class UserDAO implements UserDataAccessInterface{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
 		}
 		
 		return false;
@@ -64,6 +70,7 @@ public class UserDAO implements UserDataAccessInterface{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
 		}
 		
 		return false;
@@ -86,6 +93,7 @@ public class UserDAO implements UserDataAccessInterface{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
 		}
 		
 		return false;
@@ -127,8 +135,7 @@ public class UserDAO implements UserDataAccessInterface{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			//Log the error here when a logger is implemented
+			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
 			
 			return new UserModel();
 		}
@@ -158,8 +165,7 @@ public class UserDAO implements UserDataAccessInterface{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			//Log the error here when a logger is implemented
+			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
 			
 			return new UserModel();
 		}
@@ -193,8 +199,7 @@ public class UserDAO implements UserDataAccessInterface{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			//Log the error
+			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
 			
 			return new UserModel();
 		}

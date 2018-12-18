@@ -3,6 +3,8 @@ package brooks.api.business;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import brooks.api.business.interfaces.UserBusinessServiceInterface;
@@ -12,6 +14,10 @@ import brooks.api.models.LoginModel;
 import brooks.api.models.RegistrationModel;
 import brooks.api.models.UserModel;
 import brooks.api.utility.PasswordSecurityUtility;
+import brooks.api.utility.exceptions.DatabaseException;
+import brooks.api.utility.exceptions.EmailAlreadyExistsException;
+import brooks.api.utility.exceptions.UsernameAlreadyExistsException;
+import brooks.api.utility.interceptors.LoggingInterceptor;
 /**
  * Service for user business logic
  * @author Brendan Brooks
@@ -19,19 +25,35 @@ import brooks.api.utility.PasswordSecurityUtility;
 public class UserBusinessService implements UserBusinessServiceInterface {
 	
 	UserDataAccessInterface dao;
-
+	
+	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 	/**
 	 * Business service for adding the user to the database. Encrypts the password
 	 * before passing it to the DAO.
 	 * 
 	 * @return Boolean (false = fail, true = success)
-	 * @throws UnsupportedEncodingException
+	 * @throws UnsupportedEncodingException, EmailAlreadyExistsException, DatabaseException
 	 */
 	@Override
-	public boolean registerUser(RegistrationModel model) throws UnsupportedEncodingException {
+	public boolean registerUser(RegistrationModel model) throws UnsupportedEncodingException, EmailAlreadyExistsException, UsernameAlreadyExistsException {
 		
 		//Encrypt the password using the security utility
 		model.setPassword(PasswordSecurityUtility.getHashedPassword(model.getPassword()));
+
+		//Ensure that the chosen email hasn't been selected already
+		if (emailExists(model.getEmail()))
+		{
+			logger.info("[INFO] EMAIL ALREADY EXISTS EXCEPTION OCCURRED");
+			//Throw an exception to force this scenario to be handled by the presentation layer
+			throw new EmailAlreadyExistsException();
+		}
+		
+		if (usernameExists(model.getUsername()))
+		{
+			logger.info("[INFO] USERNAME ALREADY EXISTS EXCEPTION OCCURRED");
+			//Throw an exception to force this scenario to be handled by the presentation layer
+			throw new UsernameAlreadyExistsException();
+		}
 		
 		//Insert into the database and ensure that it succeeded or failed
 		boolean result = dao.create(model);
@@ -49,13 +71,12 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	 */
 	@Override
 	public UserModel loginUser(LoginModel model) throws UnsupportedEncodingException {
-		System.out.println("ENTERING LOGINUSER FUCNCTION");
 		//Encrypt the password so it can be checked with the encrypted password in the database
 		model.setPassword(PasswordSecurityUtility.getHashedPassword(model.getPassword()));
 		
 		//Grab the returned UserModel from the login attempt
 		UserModel user = dao.findByLoginCredentials(model);
-		System.out.println("EXITING LOGINUSER FUCNCTION");
+
 		//Return the UserModel
 		return user;
 	}
@@ -88,7 +109,7 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	 * @return boolean for if the username already exists or not
 	 */
 	@Override
-	public boolean usernameExists(String username) throws SQLException {
+	public boolean usernameExists(String username) {
 		UserModel user = dao.findByUsername(username);
 		
 		if (user.getId() == -1) {
@@ -103,7 +124,7 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	 * @return boolean for if the email is already in the database or not
 	 */
 	@Override
-	public boolean emailExists(String email) throws SQLException {
+	public boolean emailExists(String email) {
 		UserModel user = dao.findByEmail(email);
 		
 		if(user.getId() == -1) {
