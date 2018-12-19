@@ -22,6 +22,7 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	private DataAccessInterface<FriendModel> friendDAO;
 	private DataAccessInterface<FriendInviteModel> friendInviteDAO;
 	
+	//Needs an Invite Already Exists exception to be implemented for if a repeat invite is sent
 	@Override
 	public boolean sendFriendInvite(FriendInviteModel invite) {
 		boolean status = friendInviteDAO.create(invite);
@@ -48,12 +49,11 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	public boolean acceptInvite(int inviteID) throws InviteNotFoundException, InviteAlreadyAcceptedException {
 		FriendInviteModel invite = friendInviteDAO.findByID(inviteID);
 		
-		if(invite.getAccepted() == 1) {
+		if(invite.getAccepted() == 1)
 			throw new InviteAlreadyAcceptedException();
-		}
 		
-		boolean acceptStatus = false;
-		boolean addRelationStatus = false;
+		boolean acceptStatus = false, addRelationStatus = false;
+
 		if(invite.getId() != -1)
 		{
 			acceptStatus = friendInviteDAO.update(invite);
@@ -66,6 +66,15 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 			return true;
 		else
 			return false;
+	}
+	
+	@Override
+	public boolean declineInvite(int inviteID) {
+		boolean status = false;
+		
+		status = friendInviteDAO.delete(inviteID);
+		
+		return status;
 	}
 	
 	@Autowired

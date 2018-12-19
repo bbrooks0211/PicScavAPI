@@ -15,6 +15,11 @@ import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.FriendInviteModel;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
+/**
+ * Data Access class for all Friend Invite operations
+ * @author Brendan Brooks
+ *
+ */
 public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 	
 	@SuppressWarnings("unused")
@@ -23,6 +28,10 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 	
 	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
+	/**
+	 * Creates an invite in the database
+	 * @param model
+	 */
 	@Override
 	public boolean create(FriendInviteModel model) {
 		String sql = "INSERT INTO friendInvites(sender, receiver, accepted) VALUES(?, ?, ?)";
@@ -88,6 +97,10 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 		return null;
 	}
 
+	/**
+	 * Gets the friend invite by the id
+	 * @param id
+	 */
 	@Override
 	public FriendInviteModel findByID(int id) {
 		String sql = "SELECT * FROM friendInvites WHERE id=?";
@@ -110,18 +123,16 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 		return new FriendInviteModel();
 	}
 
-	@Autowired
-	private void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
-	}
-
 	@Override
 	public List<FriendInviteModel> findAllForID(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Gets all friend invites for a user based on their username
+	 * @param string
+	 */
 	@Override
 	public List<FriendInviteModel> findAllByString(String string) {
 		
@@ -144,5 +155,11 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 		}
 		
 		return list;
+	}
+	
+	@Autowired
+	private void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
 }

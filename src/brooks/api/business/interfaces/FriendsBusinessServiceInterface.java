@@ -12,4 +12,5 @@ public interface FriendsBusinessServiceInterface {
 	public boolean addFriendRelationship(FriendModel model);
 	public List<FriendInviteModel> getInvitesForUsername(String username);
 	public boolean acceptInvite(int inviteID) throws InviteNotFoundException, InviteAlreadyAcceptedException;
+	public boolean declineInvite(int inviteID);
 }

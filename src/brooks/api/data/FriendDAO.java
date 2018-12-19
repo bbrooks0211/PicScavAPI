@@ -16,6 +16,11 @@ import brooks.api.models.FriendInviteModel;
 import brooks.api.models.FriendModel;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
+/**
+ * Data Access class for all Friend operations
+ * @author Brendan Brooks
+ *
+ */
 public class FriendDAO implements DataAccessInterface<FriendModel> {
 	@SuppressWarnings("unused")
 	private DataSource dataSource;
