@@ -53,7 +53,7 @@ public class UserDAO implements UserDataAccessInterface{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
 		}
 		
 		return false;
@@ -70,7 +70,7 @@ public class UserDAO implements UserDataAccessInterface{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
 		}
 		
 		return false;
@@ -93,7 +93,7 @@ public class UserDAO implements UserDataAccessInterface{
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
 		}
 		
 		return false;
@@ -135,7 +135,7 @@ public class UserDAO implements UserDataAccessInterface{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
 			
 			return new UserModel();
 		}
@@ -165,7 +165,7 @@ public class UserDAO implements UserDataAccessInterface{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
 			
 			return new UserModel();
 		}
@@ -194,21 +194,32 @@ public class UserDAO implements UserDataAccessInterface{
 			}
 			else
 			{
-				System.out.println("Could not find the user");
 				return new UserModel();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION ERRORED");
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
 			
 			return new UserModel();
 		}
 	}
 	
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
+	private void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public List<RegistrationModel> findAllForID(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RegistrationModel> findAllByString(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.data.UserDAO;
+import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.data.interfaces.UserDataAccessInterface;
+import brooks.api.models.FriendModel;
 import brooks.api.models.LoginModel;
 import brooks.api.models.RegistrationModel;
 import brooks.api.models.UserModel;
@@ -25,6 +27,7 @@ import brooks.api.utility.interceptors.LoggingInterceptor;
 public class UserBusinessService implements UserBusinessServiceInterface {
 	
 	UserDataAccessInterface dao;
+	private DataAccessInterface<FriendModel> friendDAO;
 	
 	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 	/**
@@ -76,6 +79,9 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 		
 		//Grab the returned UserModel from the login attempt
 		UserModel user = dao.findByLoginCredentials(model);
+		
+		//Get the friends for the user
+		user.setFriends(friendDAO.findAllByString(model.getUsername()));
 
 		//Return the UserModel
 		return user;
@@ -148,5 +154,10 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	public void setUserDAO(UserDAO dao)
 	{
 		this.dao = dao;
+	}
+	
+	@Autowired
+	private void setFriendDAO(DataAccessInterface<FriendModel> dao) {
+		this.friendDAO = dao;
 	}
 }

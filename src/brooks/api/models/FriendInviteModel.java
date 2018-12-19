@@ -4,19 +4,22 @@ public class FriendInviteModel {
 	private int id;
 	private String sender;
 	private String receiver;
+	private int accepted;
 	
 	public FriendInviteModel() {
 		super();
 		this.id = -1;
 		this.sender = "";
 		this.receiver = "";
+		this.accepted = -1;
 	}
 	
-	public FriendInviteModel(int id, String sender, String receiver) {
+	public FriendInviteModel(int id, String sender, String receiver, int accepted) {
 		super();
 		this.id = id;
 		this.sender = sender;
 		this.receiver = receiver;
+		this.accepted = accepted;
 	}
 	
 	public int getId() {
@@ -36,5 +39,13 @@ public class FriendInviteModel {
 	}
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
+	}
+
+	public int getAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(int accepted) {
+		this.accepted = accepted;
 	}
 }
