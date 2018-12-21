@@ -145,6 +145,7 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 		return dao.update(user);
 	}
 
+	//TODO: Delete all friend relationships upon deleting the user, delete all invites, and delete all games hosted by the user, as well as remove them from any games they are/have been involved in
 	@Override
 	public boolean deleteUser(int id) {
 		return dao.delete(id);

@@ -22,6 +22,14 @@ public class FriendInviteModel {
 		this.accepted = accepted;
 	}
 	
+	public FriendInviteModel(String sender, String receiver) {
+		super();
+		this.id = -1;
+		this.sender = sender;
+		this.receiver = receiver;
+		this.accepted = -1;
+	}
+	
 	public int getId() {
 		return id;
 	}

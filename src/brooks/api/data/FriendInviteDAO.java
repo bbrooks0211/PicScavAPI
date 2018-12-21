@@ -93,8 +93,24 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 
 	@Override
 	public FriendInviteModel find(FriendInviteModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM friendInvites WHERE sender = ? AND receiver = ?";
+		
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getSender(), model.getReceiver());
+			if(srs.next())
+			{
+				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getString("sender"), srs.getString("receiver"), srs.getInt("accepted"));
+				return invite;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
+		return new FriendInviteModel();
 	}
 
 	/**

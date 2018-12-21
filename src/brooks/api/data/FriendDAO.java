@@ -70,7 +70,14 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, string, string);
 			while(srs.next())
 			{
-				list.add(new FriendModel(srs.getInt("id"), srs.getString("user_1"), srs.getString("user_2")));
+				String user1 = srs.getString("user_1");
+				String user2 = srs.getString("user_2");
+				
+				//If/else statement to ensure that the friendUsername field in the model is filled by the friend info, and the username field is filled by the user
+				if(user1.equals(string))
+					list.add(new FriendModel(srs.getInt("id"), user1, user2));
+				else
+					list.add(new FriendModel(srs.getInt("id"), user2, user1));
 			}
 		}
 		catch (Exception e)
@@ -90,14 +97,42 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM friendRelations WHERE id=?";
+		try
+		{
+			int rows = jdbcTemplateObject.update(sql, id);
+			
+			return rows == 1 ? true : false;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
 		return false;
 	}
 
 	@Override
 	public FriendModel find(FriendModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM friendRelations WHERE user_1 = ? AND user_2 = ? OR user_1 = ? AND user_2 = ?";
+		
+		FriendModel returnModel = new FriendModel();
+		
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getUsername(), model.getFriendUsername(), model.getFriendUsername(), model.getUsername());
+			if(srs.next())
+			{
+				returnModel = new FriendModel(srs.getInt("id"), srs.getString("user_1"), srs.getString("user_2"));
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
+		}
+		
+		return returnModel;
 	}
 
 	@Override
