@@ -8,9 +8,10 @@ import brooks.api.utility.exceptions.AlreadyFriendsException;
 import brooks.api.utility.exceptions.InviteAlreadyAcceptedException;
 import brooks.api.utility.exceptions.InviteAlreadySentException;
 import brooks.api.utility.exceptions.InviteNotFoundException;
+import brooks.api.utility.exceptions.UserNotFoundException;
 
 public interface FriendsBusinessServiceInterface {
-	public boolean sendFriendInvite(FriendInviteModel invite) throws AlreadyFriendsException, InviteAlreadySentException;
+	public boolean sendFriendInvite(FriendInviteModel invite) throws AlreadyFriendsException, InviteAlreadySentException, UserNotFoundException;
 	public boolean addFriendRelationship(FriendModel model);
 	public List<FriendInviteModel> getInvitesForUsername(String username);
 	public List<FriendModel> getFriends(String username);

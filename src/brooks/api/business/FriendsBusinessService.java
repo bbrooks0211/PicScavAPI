@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import brooks.api.business.interfaces.FriendsBusinessServiceInterface;
+import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.FriendInviteModel;
 import brooks.api.models.FriendModel;
@@ -13,6 +14,7 @@ import brooks.api.utility.exceptions.AlreadyFriendsException;
 import brooks.api.utility.exceptions.InviteAlreadyAcceptedException;
 import brooks.api.utility.exceptions.InviteAlreadySentException;
 import brooks.api.utility.exceptions.InviteNotFoundException;
+import brooks.api.utility.exceptions.UserNotFoundException;
 
 /**
  * Business service class for all friend functionalities
@@ -23,6 +25,7 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	
 	private DataAccessInterface<FriendModel> friendDAO;
 	private DataAccessInterface<FriendInviteModel> friendInviteDAO;
+	private UserBusinessServiceInterface userService;
 	
 	/**
 	 * Method for sending a friend invite to another user
@@ -31,13 +34,15 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	 * @throws InviteAlreadySentException
 	 */
 	@Override
-	public boolean sendFriendInvite(FriendInviteModel invite) throws AlreadyFriendsException, InviteAlreadySentException {
+	public boolean sendFriendInvite(FriendInviteModel invite) throws AlreadyFriendsException, InviteAlreadySentException, UserNotFoundException {
 		//Ensure that the two users aren't already friends
 		if(alreadyFriends(invite))
 			throw new AlreadyFriendsException();
 		//Ensure that this user hasn't already sent an invite to the receiver
 		if(inviteExists(invite))
 			throw new InviteAlreadySentException();
+		if(!userService.usernameExists(invite.getReceiver()))
+			throw new UserNotFoundException();
 		
 		//Check if the receiver has already sent an invite to the sender of this invite
 		if(inviteExists(new FriendInviteModel(invite.getReceiver(), invite.getSender())))
@@ -49,13 +54,11 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 			try {
 				//Accept the invite using the ID of the invite sent by the receiver
 				return acceptInvite(receiverInvite.getId());
-			} 
-			//This exception is swallowed because if an invite doesn't already exist between the two, then one will be created at the end of this method
-			catch (InviteNotFoundException e) {
-			} 
-			//This exception is swallowed because this function already checks if the two users are friends
-			catch (InviteAlreadyAcceptedException e) {
 			}
+			//InviteNotFoundException is swallowed because if an invite doesn't already exist between the two, then one will be created at the end of this method
+			//InviteAlreadyAcceptedException is swallowed because this function already checks if the two users are friends
+			catch (InviteNotFoundException | InviteAlreadyAcceptedException e) {
+			} 
 		}
 		
 		return friendInviteDAO.create(invite);
@@ -171,4 +174,9 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	private void setFriendInviteDAO(DataAccessInterface<FriendInviteModel> dao) {
 		this.friendInviteDAO = dao;
 	}
+	
+	@Autowired
+	public void setUserBusinessService(UserBusinessServiceInterface service) {
+		this.userService = service;
+	} 
 }

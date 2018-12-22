@@ -19,6 +19,7 @@ import brooks.api.utility.exceptions.AlreadyFriendsException;
 import brooks.api.utility.exceptions.InviteAlreadyAcceptedException;
 import brooks.api.utility.exceptions.InviteAlreadySentException;
 import brooks.api.utility.exceptions.InviteNotFoundException;
+import brooks.api.utility.exceptions.UserNotFoundException;
 
 @Path("/friends")
 @Service
@@ -40,6 +41,9 @@ public class FriendsRestService {
 			return response;
 		} catch (InviteAlreadySentException e) {
 			response = new RestResponse<Boolean>(-2, "An invite has already been sent by this user", Boolean.valueOf(false));
+			return response;
+		} catch (UserNotFoundException e) {
+			response = new RestResponse<Boolean>(-3, "The user could not be found", Boolean.valueOf(false));
 			return response;
 		}
 		

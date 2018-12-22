@@ -16,6 +16,6 @@ public interface UserBusinessServiceInterface {
 	public boolean deleteUser(int id);
 	public UserModel findByUsername(String username);
 	public UserModel findByEmail(String email);
-	public boolean usernameExists(String username) throws SQLException;
-	public boolean emailExists(String email) throws SQLException;
+	public boolean usernameExists(String username);
+	public boolean emailExists(String email);
 }

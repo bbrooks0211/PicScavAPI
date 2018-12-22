@@ -137,13 +137,7 @@ public class UserRestService {
 		RestResponse<Boolean> response;
 		boolean status = Boolean.valueOf(false);
 		
-		try {
-			status = service.usernameExists(username);
-		} catch(SQLException e) { //Create a database exception and use that
-			e.printStackTrace();
-			response = new RestResponse<Boolean>(0, "Database exception occurred", Boolean.valueOf(status));
-			return response;
-		}
+		status = service.usernameExists(username);
 		
 		response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
 		
@@ -162,13 +156,7 @@ public class UserRestService {
 		RestResponse<Boolean> response;
 		boolean status = Boolean.valueOf(false);
 		
-		try {
-			status = service.emailExists(email);
-		} catch(SQLException e) { //Create a database exception and use that
-			e.printStackTrace();
-			response = new RestResponse<Boolean>(0, "Database exception occurred", Boolean.valueOf(status));
-			return response;
-		}
+		status = service.emailExists(email);
 		
 		response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
 		
