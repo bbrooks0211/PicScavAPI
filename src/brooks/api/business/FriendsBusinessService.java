@@ -86,12 +86,20 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		return status;
 	}
 	
+	/**
+	 * Get's the friends for a user based on their username
+	 * @param String
+	 */
 	@Override
 	public List<FriendModel> getFriends(String username)
 	{	
 		return friendDAO.findAllByString(username);
 	}
 	
+	/**
+	 * Gets all the invites for a user based on their username
+	 * @param String
+	 */
 	@Override
 	public List<FriendInviteModel> getInvitesForUsername(String username)
 	{
@@ -101,6 +109,10 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		return list;
 	}
 	
+	/**
+	 * Accepts an invite based on the ID
+	 * @param int
+	 */
 	@Override
 	public boolean acceptInvite(int inviteID) throws InviteNotFoundException, InviteAlreadyAcceptedException 
 	{
@@ -125,6 +137,10 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 			return false;
 	}
 	
+	/**
+	 * Declines an invite based on the ID
+	 * @param int
+	 */
 	@Override
 	public boolean declineInvite(int inviteID) throws InviteNotFoundException 
 	{
@@ -141,6 +157,10 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		return status;
 	}
 	
+	/**
+	 * Checks if people are already friends or not
+	 * @param FriendModel
+	 */
 	@Override
 	public boolean alreadyFriends(FriendModel model)
 	{
@@ -184,6 +204,9 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		return friendDAO.delete(id);
 	}
 	
+	/**
+	 * Takes a list and sets all the usernames for a list of invites
+	 */
 	@Override
 	public List<FriendInviteModel> setUsernamesForInviteList(List<FriendInviteModel> list) 
 	{
@@ -194,6 +217,9 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		return list;
 	}
 	
+	/**
+	 * Sets the usernames for an invite, since invites when retrieved from the database only have ID's.
+	 */
 	@Override
 	public FriendInviteModel setUsernamesForInvite(FriendInviteModel invite) 
 	{

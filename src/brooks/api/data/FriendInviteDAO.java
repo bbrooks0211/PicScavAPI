@@ -91,6 +91,11 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 		return false;
 	}
 
+	/**
+	 * Finds an invite based on the sender and receiver
+	 * @param model
+	 * @return FriendInviteModel
+	 */
 	@Override
 	public FriendInviteModel find(FriendInviteModel model) {
 		String sql = "SELECT * FROM friendInvites WHERE senderID = ? AND receiverID = ?";
@@ -139,6 +144,11 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 		return new FriendInviteModel();
 	}
 
+	/**
+	 * finds all invites for a user based on their ID
+	 * @param id
+	 * @return List<FriendInviteModel>
+	 */
 	@Override
 	public List<FriendInviteModel> findAllForID(int id) {
 		String sql = "SELECT * FROM friendInvites WHERE receiverID=?";
@@ -165,7 +175,7 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 
 	/**
 	 * Gets all friend invites for a user based on their username.
-	 * NO LONGER IN USER
+	 * NO LONGER IN USE
 	 * @param string
 	 */
 	@Override
