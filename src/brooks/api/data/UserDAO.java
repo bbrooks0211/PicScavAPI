@@ -221,5 +221,30 @@ public class UserDAO implements UserDataAccessInterface{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public UserModel findUserByID(int id) {
+		
+		String sql = "SELECT * FROM users WHERE id=?";
+		
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			if (srs.next())
+			{
+				UserModel user = new UserModel(srs.getInt("id"), srs.getString("username"), srs.getString("email"), new ArrayList<FriendModel>(), srs.getInt("purchasedAdRemoval"));
+				return user;
+			}
+			else
+			{
+				return new UserModel();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+			
+			return new UserModel();
+		}
+	}
 	
 }

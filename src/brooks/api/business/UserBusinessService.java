@@ -141,6 +141,11 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	}
 	
 	@Override
+	public UserModel findByID(int id) {
+		return dao.findUserByID(id);
+	}
+	
+	@Override
 	public boolean updateUser(UserModel user) {
 		return dao.update(user);
 	}

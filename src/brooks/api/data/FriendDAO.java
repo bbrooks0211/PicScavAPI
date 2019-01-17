@@ -34,10 +34,10 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 	 */
 	@Override
 	public boolean create(FriendModel model) {
-		String sql = "INSERT INTO friendRelations(user_1, user_2) VALUES(?, ?)";
+		String sql = "INSERT INTO friendRelations(user_1_id, user_2_id) VALUES(?, ?)";
 		try
 		{
-			int rows = jdbcTemplateObject.update(sql, model.getUsername(), model.getFriendUsername());
+			int rows = jdbcTemplateObject.update(sql, model.getUserID(), model.getFriendID());
 			
 			return rows == 1 ? true : false;
 		} catch (Exception e)
@@ -51,30 +51,20 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 	
 	@Override
 	public List<FriendModel> findAllForID(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/**
-	 * Finds all friends for a user by their username
-	 * @param id
-	 */
-	@Override
-	public List<FriendModel> findAllByString(String string) {
-		String sql = "SELECT * FROM friendRelations WHERE user_1 = ? OR user_2 = ?";
+		String sql = "SELECT * FROM friendRelations WHERE user_1_id = ? OR user_2_id = ?";
 		
 		List<FriendModel> list = new ArrayList<FriendModel>();
 		
 		try
 		{
-			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, string, string);
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id, id);
 			while(srs.next())
 			{
-				String user1 = srs.getString("user_1");
-				String user2 = srs.getString("user_2");
+				int user1 = srs.getInt("user_1_id");
+				int user2 = srs.getInt("user_2_id");
 				
 				//If/else statement to ensure that the friendUsername field in the model is filled by the friend info, and the username field is filled by the user
-				if(user1.equals(string))
+				if(user1 == id)
 					list.add(new FriendModel(srs.getInt("id"), user1, user2));
 				else
 					list.add(new FriendModel(srs.getInt("id"), user2, user1));
@@ -87,6 +77,16 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * Finds all friends for a user by their username.
+	 * THIS FUNCTION IS DEPRECATED AND WILL NO LONGER BE USED
+	 * @param id
+	 */
+	@Override
+	public List<FriendModel> findAllByString(String string) {
+		return null;
 	}
 
 	@Override
@@ -114,16 +114,16 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 
 	@Override
 	public FriendModel find(FriendModel model) {
-		String sql = "SELECT * FROM friendRelations WHERE user_1 = ? AND user_2 = ? OR user_1 = ? AND user_2 = ?";
+		String sql = "SELECT * FROM friendRelations WHERE user_1_id = ? AND user_2_id = ? OR user_1_id = ? AND user_2_id = ?";
 		
 		FriendModel returnModel = new FriendModel();
 		
 		try
 		{
-			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getUsername(), model.getFriendUsername(), model.getFriendUsername(), model.getUsername());
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getUserID(), model.getFriendID(), model.getFriendID(), model.getUserID());
 			if(srs.next())
 			{
-				returnModel = new FriendModel(srs.getInt("id"), srs.getString("user_1"), srs.getString("user_2"));
+				returnModel = new FriendModel(srs.getInt("id"), srs.getInt("user_1_id"), srs.getInt("user_2_id"));
 			}
 		}
 		catch (Exception e)

@@ -13,4 +13,5 @@ public interface UserDataAccessInterface extends DataAccessInterface<Registratio
 	public UserModel findByUsername(String username);
 	public UserModel findByEmail(String email);
 	public UserModel findByLoginCredentials(LoginModel model);
+	public UserModel findUserByID(int id);
 }

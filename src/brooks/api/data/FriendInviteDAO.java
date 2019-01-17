@@ -34,10 +34,10 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 	 */
 	@Override
 	public boolean create(FriendInviteModel model) {
-		String sql = "INSERT INTO friendInvites(sender, receiver, accepted) VALUES(?, ?, ?)";
+		String sql = "INSERT INTO friendInvites(senderID, receiverID, accepted) VALUES(?, ?, ?)";
 		try
 		{
-			int rows = jdbcTemplateObject.update(sql, model.getSender(), model.getReceiver(), 0);
+			int rows = jdbcTemplateObject.update(sql, model.getSenderID(), model.getReceiverID(), 0);
 			
 			return rows == 1 ? true : false;
 		} catch (Exception e)
@@ -93,14 +93,14 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 
 	@Override
 	public FriendInviteModel find(FriendInviteModel model) {
-		String sql = "SELECT * FROM friendInvites WHERE sender = ? AND receiver = ?";
+		String sql = "SELECT * FROM friendInvites WHERE senderID = ? AND receiverID = ?";
 		
 		try
 		{
-			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getSender(), model.getReceiver());
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getSenderID(), model.getReceiverID());
 			if(srs.next())
 			{
-				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getString("sender"), srs.getString("receiver"), srs.getInt("accepted"));
+				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("receiverID"), srs.getInt("accepted"));
 				return invite;
 			}
 		}
@@ -126,7 +126,7 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
 			if(srs.next())
 			{
-				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getString("sender"), srs.getString("receiver"), srs.getInt("accepted"));
+				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("receiverID"), srs.getInt("accepted"));
 				return invite;
 			}
 		}
@@ -141,36 +141,36 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 
 	@Override
 	public List<FriendInviteModel> findAllForID(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Gets all friend invites for a user based on their username
-	 * @param string
-	 */
-	@Override
-	public List<FriendInviteModel> findAllByString(String string) {
-		
-		String sql = "SELECT * FROM friendInvites WHERE receiver = ? AND accepted = 0";
-		
+		String sql = "SELECT * FROM friendInvites WHERE receiverID=?";
 		List<FriendInviteModel> list = new ArrayList<FriendInviteModel>();
 		
 		try
 		{
-			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, string);
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
 			while(srs.next())
 			{
-				list.add(new FriendInviteModel(srs.getInt("id"), srs.getString("sender"), srs.getString("receiver"), srs.getInt("accepted")));
+				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("receiverID"), srs.getInt("accepted"));
+				list.add(invite);
+				return list;
 			}
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
-			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
 		}
 		
 		return list;
+	}
+
+	/**
+	 * Gets all friend invites for a user based on their username.
+	 * NO LONGER IN USER
+	 * @param string
+	 */
+	@Override
+	public List<FriendInviteModel> findAllByString(String string) {
+		return null;
 	}
 	
 	@Autowired

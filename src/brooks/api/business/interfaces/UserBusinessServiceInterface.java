@@ -18,4 +18,5 @@ public interface UserBusinessServiceInterface {
 	public UserModel findByEmail(String email);
 	public boolean usernameExists(String username);
 	public boolean emailExists(String email);
+	UserModel findByID(int id);
 }

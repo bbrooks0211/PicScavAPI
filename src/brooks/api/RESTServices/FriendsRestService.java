@@ -21,12 +21,23 @@ import brooks.api.utility.exceptions.InviteAlreadySentException;
 import brooks.api.utility.exceptions.InviteNotFoundException;
 import brooks.api.utility.exceptions.UserNotFoundException;
 
+/**
+ * REST service for all friend-based operations
+ * @author Brendan Brooks
+ *
+ */
 @Path("/friends")
 @Service
 public class FriendsRestService {
 
 	private static FriendsBusinessServiceInterface service;
 	
+	/**
+	 * Sends a friend invite <br>
+	 * URI: /sendInvite
+	 * @param model
+	 * @return RestResponse<Boolean>
+	 */
 	@POST
 	@Path("/sendInvite")
 	@Produces("application/json")
@@ -55,6 +66,12 @@ public class FriendsRestService {
 		return response;
 	}
 	
+	/**
+	 * Accepts a friend invite <br>
+	 * URI: /acceptInvite
+	 * @param model
+	 * @return RestResponse<Boolean>
+	 */
 	@GET
 	@Path("/acceptInvite/{id}")
 	@Produces("application/json")
@@ -64,17 +81,22 @@ public class FriendsRestService {
 		boolean status = false;
 		
 		try {
+			//Try to accept the invite
 			status = service.acceptInvite(id);
 		} catch (InviteNotFoundException e) {
+			//Returns exception if the invite couldn't be found
 			response = new RestResponse<Boolean>(-1, "Invite could not be found", Boolean.valueOf(status));
 			return response;
 		} catch (InviteAlreadyAcceptedException e) {
+			//Returns an exception if the invite has somehow already been accepted
 			response = new RestResponse<Boolean>(-2, "Invite has already been accepted", Boolean.valueOf(status));
 			return response;
 		}
 		
+		//If it was successful, return that it was
 		if(status)
 			response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
+		//In case any other failure could have happened
 		else
 			response = new RestResponse<Boolean>(0, "Failure occurred", Boolean.valueOf(status));
 		
