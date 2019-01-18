@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import brooks.api.business.interfaces.FriendsBusinessServiceInterface;
 import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.data.UserDAO;
 import brooks.api.data.interfaces.DataAccessInterface;
@@ -28,6 +29,7 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	
 	UserDataAccessInterface dao;
 	private DataAccessInterface<FriendModel> friendDAO;
+	private FriendsBusinessServiceInterface friendsService;
 	
 	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 	/**
@@ -81,7 +83,7 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 		UserModel user = dao.findByLoginCredentials(model);
 		
 		//Get the friends for the user
-		user.setFriends(friendDAO.findAllByString(model.getUsername()));
+		user.setFriends(friendsService.getFriends(user.getUsername()));
 
 		//Return the UserModel
 		return user;
@@ -165,5 +167,10 @@ public class UserBusinessService implements UserBusinessServiceInterface {
 	@Autowired
 	private void setFriendDAO(DataAccessInterface<FriendModel> dao) {
 		this.friendDAO = dao;
+	}
+	
+	@Autowired
+	private void setFriendsBusinessService(FriendsBusinessServiceInterface service) {
+		this.friendsService = service;
 	}
 }
