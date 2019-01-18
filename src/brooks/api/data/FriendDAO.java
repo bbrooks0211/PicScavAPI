@@ -65,9 +65,9 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 				
 				//If/else statement to ensure that the friendUsername field in the model is filled by the friend info, and the username field is filled by the user
 				if(user1 == id)
-					list.add(new FriendModel(srs.getInt("id"), user1, user2));
-				else
 					list.add(new FriendModel(srs.getInt("id"), user2, user1));
+				else
+					list.add(new FriendModel(srs.getInt("id"), user1, user2));
 			}
 		}
 		catch (Exception e)
@@ -114,7 +114,7 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 
 	@Override
 	public FriendModel find(FriendModel model) {
-		String sql = "SELECT * FROM friendRelations WHERE user_1_id = ? AND user_2_id = ? OR user_1_id = ? AND user_2_id = ?";
+		String sql = "SELECT * FROM friendRelations WHERE (user_1_id = ? AND user_2_id = ?) OR (user_1_id = ? AND user_2_id = ?)";
 		
 		FriendModel returnModel = new FriendModel();
 		

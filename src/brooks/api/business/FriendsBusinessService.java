@@ -43,10 +43,10 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		//Find the users by their usernames to get more information
 		UserModel sender = userService.findByUsername(invite.getSender());
 		UserModel receiver = userService.findByUsername(invite.getReceiver());
-		
+
 		invite.setSenderID(sender.getId());
 		invite.setReceiverID(receiver.getId());
-		System.out.println("Sender: " + invite.getSenderID());
+
 		
 		//Ensure that the two users aren't already friends
 		if(alreadyFriends(invite))
@@ -56,10 +56,10 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 			throw new InviteAlreadySentException();
 		
 		//Check if the receiver has already sent an invite to the sender of this invite
-		if(inviteExists(new FriendInviteModel(invite.getReceiver(), invite.getSender())))
+		if(inviteExists(new FriendInviteModel(-1, invite.getReceiver(), invite.getReceiverID(), invite.getSender(), invite.getSenderID(), -1)))
 		{
 			//Get the invite that was already sent by the receiver
-			FriendInviteModel receiverInvite = getInvite(new FriendInviteModel(invite.getReceiver(), invite.getSender()));
+			FriendInviteModel receiverInvite = getInvite(new FriendInviteModel(-1, invite.getReceiver(), invite.getReceiverID(), invite.getSender(), invite.getSenderID(), -1));
 			
 			
 			try {
@@ -93,7 +93,10 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	@Override
 	public List<FriendModel> getFriends(String username)
 	{	
-		return friendDAO.findAllByString(username);
+		UserModel user = userService.findByUsername(username);
+		List<FriendModel> list = friendDAO.findAllForID(user.getId());
+		list = setUsernamesForFriendList(list);
+		return list;
 	}
 	
 	/**
@@ -227,6 +230,31 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 		invite.setSender(userService.findByID(invite.getSenderID()).getUsername());
 		
 		return invite;
+	}
+	
+	/**
+	 * Takes a list and sets all the usernames for a list of friends
+	 */
+	@Override
+	public List<FriendModel> setUsernamesForFriendList(List<FriendModel> list) 
+	{
+		for(FriendModel m : list) {
+			m = setUsernamesForFriendModel(m);
+		}
+		
+		return list;
+	}
+	
+	/**
+	 * Find sets the usernames for a FriendModel
+	 * @param friend
+	 * @return FriendModel
+	 */
+	@Override
+	public FriendModel setUsernamesForFriendModel(FriendModel friend) {
+		friend.setFriendUsername(userService.findByID(friend.getFriendID()).getUsername());
+		friend.setUsername(userService.findByID(friend.getUserID()).getUsername());
+		return friend;
 	}
 	
 	@Autowired

@@ -24,4 +24,6 @@ public interface FriendsBusinessServiceInterface {
 	public boolean deleteFriendship(int id);
 	List<FriendInviteModel> setUsernamesForInviteList(List<FriendInviteModel> list);
 	FriendInviteModel setUsernamesForInvite(FriendInviteModel invite);
+	FriendModel setUsernamesForFriendModel(FriendModel friend);
+	List<FriendModel> setUsernamesForFriendList(List<FriendModel> list);
 }
