@@ -166,7 +166,7 @@ public class FriendsRestService {
 		return response;
 	}
 	
-	@Autowired
+	@Autowired 
 	private void setFriendsBusinessService(FriendsBusinessServiceInterface service) {
 		this.service = service;
 	}

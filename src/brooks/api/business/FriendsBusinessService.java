@@ -186,7 +186,7 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	{
 		FriendInviteModel inv = friendInviteDAO.find(invite);
 		
-		if(inv.getId() == -1)
+		if(inv.getId() == -1 || inv.getAccepted() == 1)
 			return false;
 		
 		return true;
