@@ -98,11 +98,11 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 	 */
 	@Override
 	public FriendInviteModel find(FriendInviteModel model) {
-		String sql = "SELECT * FROM friendInvites WHERE senderID = ? AND receiverID = ?";
+		String sql = "SELECT * FROM friendInvites WHERE senderID = ? AND receiverID = ? AND accepted = ?";
 		
 		try
 		{
-			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getSenderID(), model.getReceiverID());
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getSenderID(), model.getReceiverID(), 0);
 			if(srs.next())
 			{
 				FriendInviteModel invite = new FriendInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("receiverID"), srs.getInt("accepted"));
