@@ -22,11 +22,11 @@ public class GameDAO implements DataAccessInterface<GameModel> {
 
 	@Override
 	public boolean create(GameModel model) {
-		String sql = "INSERT INTO games(hostID, hostUsername, category, timeLimit, endTime, startTime) VALUES(?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO games(hostID, lobbyName, hostUsername, category, timeLimit, endTime, startTime) VALUES(?, ?, ?, ?, ?, ?, ?)";
 		
 		try
 		{
-			int rows = jdbcTemplateObject.update(sql, model.getHostID(), model.getHostUsername(), model.getCategory(), model.getTimeLimit(), model.getEndTime(), model.getStartTime());
+			int rows = jdbcTemplateObject.update(sql, model.getHostID(), model.getLobbyName(), model.getHostUsername(), model.getCategory(), model.getTimeLimit(), model.getEndTime(), model.getStartTime());
 			
 			return rows == 1 ? true : false;
 		} catch(Exception e)

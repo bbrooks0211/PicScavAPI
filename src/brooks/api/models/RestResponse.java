@@ -31,6 +31,12 @@ public class RestResponse<T> {
 		this.data = data;
 	}
 	
+	public void setAll(int status, String message, T data) {
+		this.status = status;
+		this.message = message;
+		this.data = data;
+	}
+	
 	public int getStatus() {
 		return status;
 	}
