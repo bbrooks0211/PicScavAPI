@@ -34,6 +34,7 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	 * @param FriendInviteModel
 	 * @throws AlreadyFriendsException
 	 * @throws InviteAlreadySentException
+	 * @return boolean
 	 */
 	@Override
 	public boolean sendFriendInvite(FriendInviteModel invite) throws AlreadyFriendsException, InviteAlreadySentException, UserNotFoundException {
@@ -81,14 +82,17 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	 */
 	@Override
 	public boolean addFriendRelationship(FriendModel model) {
+		//Attempt to add the friend relationship
 		boolean status = friendDAO.create(model);
 		
+		//Return the status
 		return status;
 	}
 	
 	/**
 	 * Get's the friends for a user based on their username
 	 * @param String
+	 * @return boolean
 	 */
 	@Override
 	public List<FriendModel> getFriends(String username)
@@ -102,6 +106,7 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	/**
 	 * Gets all the invites for a user based on their username
 	 * @param String
+	 * @return boolean
 	 */
 	@Override
 	public List<FriendInviteModel> getInvitesForUsername(String username)
@@ -115,17 +120,22 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	/**
 	 * Accepts an invite based on the ID
 	 * @param int
+	 * @return boolean
 	 */
 	@Override
 	public boolean acceptInvite(int inviteID) throws InviteNotFoundException, InviteAlreadyAcceptedException 
 	{
+		//Finds the invite based on the ID
 		FriendInviteModel invite = friendInviteDAO.findByID(inviteID);
 		
+		//Cgeck if it's already been accepted
 		if(invite.getAccepted() == 1)
 			throw new InviteAlreadyAcceptedException();
 		
+		//Set up additional status variables to return if it was successful or not
 		boolean acceptStatus = false, addRelationStatus = false;
 
+		//If the invite does exist, accept it and add the friend relationship to the database
 		if(invite.getId() != -1)
 		{
 			acceptStatus = friendInviteDAO.update(invite);
@@ -134,6 +144,7 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 			throw new InviteNotFoundException();
 		}
 		
+		//Return if it was successful or not
 		if (acceptStatus && addRelationStatus)
 			return true;
 		else
@@ -143,64 +154,99 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	/**
 	 * Declines an invite based on the ID
 	 * @param int
+	 * @return boolean
 	 */
 	@Override
 	public boolean declineInvite(int inviteID) throws InviteNotFoundException 
 	{
+		//set up status variable for returning if the operation was successful or not
 		boolean status = false;
+		
+		//get the invite that's being declined
 		FriendInviteModel invite = friendInviteDAO.findByID(inviteID);
 		
+		//If it doesn't exist, throw an exception
 		if(invite.getId() == -1)
 		{
 			throw new InviteNotFoundException();	
 		}
 		
+		//Delete the invite from the database
 		status = friendInviteDAO.delete(inviteID);
 		
+		//Return if it was successful or not
 		return status;
 	}
 	
 	/**
 	 * Checks if people are already friends or not
 	 * @param FriendModel
+	 * @return boolean
 	 */
 	@Override
 	public boolean alreadyFriends(FriendModel model)
 	{
-		
+		//Try and find a friend relationship between the two
 		FriendModel friends = friendDAO.find(model);
+		
+		//If the object return has an id of -1, then the relationship could not be found
 		if(friends.getId() == -1)
 			return false;
 		
 		return true;
 	}
 	
+	/**
+	 * Checks if two users are already friends or not from an invite
+	 * @param FriendInviteModel
+	 * @return boolean
+	 */
 	@Override
 	public boolean alreadyFriends(FriendInviteModel model)
 	{	
 		return alreadyFriends(new FriendModel(-1, model.getSenderID(), model.getReceiverID()));
 	}
 	
+	/**
+	 * Checks if an invite was already sent from one user to the other
+	 * @param FriendInviteModel
+	 * @return boolean
+	 */
 	@Override
 	public boolean inviteExists(FriendInviteModel invite)
 	{
+		//Try and find an existing invite
 		FriendInviteModel inv = friendInviteDAO.find(invite);
 		
+		//If the returned one's ID is equal to one, or if the one found was already accepted, return false
 		if(inv.getId() == -1 || inv.getAccepted() == 1)
 			return false;
 		
 		return true;
 	}
 	
+	/**
+	 * Get an invite based on an invite model
+	 * @param FriendInviteModel
+	 * @return FriendInviteModel
+	 */
 	@Override
 	public FriendInviteModel getInvite(FriendInviteModel invite)
 	{
+		//Get the invite
 		FriendInviteModel m = friendInviteDAO.find(invite);
+		
+		//Set the sender and receiver based on the IDs provided by the database
 		m.setSender(userService.findByID(invite.getSenderID()).getUsername());
 		m.setReceiver(userService.findByID(invite.getReceiverID()).getUsername());
 		return m;
 	}
 	
+	/**
+	 * Remove a friend relation from the database
+	 * @param int
+	 * @return boolean
+	 */
 	@Override
 	public boolean deleteFriendship(int id)
 	{
@@ -208,11 +254,13 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	}
 	
 	/**
-	 * Takes a list and sets all the usernames for a list of invites
+	 * Takes a list of invites and sets all the usernames for that list
+	 * @param List<FriendInviteModel>
 	 */
 	@Override
 	public List<FriendInviteModel> setUsernamesForInviteList(List<FriendInviteModel> list) 
 	{
+		//Loop through each invite and set the username
 		for(FriendInviteModel m : list) {
 			m = setUsernamesForInvite(m);
 		}
@@ -221,11 +269,15 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	}
 	
 	/**
-	 * Sets the usernames for an invite, since invites when retrieved from the database only have ID's.
+	 * Sets the usernames for an invite, since invites when retrieved from the database only have ID's. 
+	 * Mainly a helper function
+	 * @param FriendInviteModel
+	 * @return FriendInviteModel
 	 */
 	@Override
 	public FriendInviteModel setUsernamesForInvite(FriendInviteModel invite) 
 	{
+		//Set the sender and receiver by retrieving the user info from the database
 		invite.setReceiver(userService.findByID(invite.getReceiverID()).getUsername());
 		invite.setSender(userService.findByID(invite.getSenderID()).getUsername());
 		
@@ -233,11 +285,14 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	}
 	
 	/**
-	 * Takes a list and sets all the usernames for a list of friends
+	 * Takes a list of FriendModel and sets all the usernames for that list
+	 * @param List<FriendModel>
+	 * @return List<FriendModel>
 	 */
 	@Override
 	public List<FriendModel> setUsernamesForFriendList(List<FriendModel> list) 
 	{
+		//Loop through each one and set the username
 		for(FriendModel m : list) {
 			m = setUsernamesForFriendModel(m);
 		}
@@ -246,14 +301,16 @@ public class FriendsBusinessService implements FriendsBusinessServiceInterface {
 	}
 	
 	/**
-	 * Find sets the usernames for a FriendModel
+	 * Finds and sets the usernames for a FriendModel
 	 * @param friend
 	 * @return FriendModel
 	 */
 	@Override
 	public FriendModel setUsernamesForFriendModel(FriendModel friend) {
+		//Set the usernames
 		friend.setFriendUsername(userService.findByID(friend.getFriendID()).getUsername());
 		friend.setUsername(userService.findByID(friend.getUserID()).getUsername());
+		
 		return friend;
 	}
 	

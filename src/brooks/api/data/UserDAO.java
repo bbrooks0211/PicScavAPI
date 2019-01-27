@@ -22,7 +22,6 @@ import brooks.api.models.FriendModel;
 import brooks.api.models.LoginModel;
 import brooks.api.models.RegistrationModel;
 import brooks.api.models.UserModel;
-import brooks.api.utility.DatabaseUtility;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
 /**

@@ -1,5 +1,10 @@
 package brooks.api.models;
 
+/**
+ * General item model
+ * @author Brendan Brooks
+ *
+ */
 public class ItemModel {
 	
 	private int id;

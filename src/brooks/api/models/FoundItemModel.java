@@ -1,5 +1,10 @@
 package brooks.api.models;
 
+/**
+ * Model for game items that have been found
+ * @author Brendan Brooks
+ *
+ */
 public class FoundItemModel {
 	private int id;
 	private int gameID;

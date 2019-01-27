@@ -1,19 +1,29 @@
 package brooks.api.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Model for items tied to a specific game
+ * @author Brendan Brooks
+ *
+ */
 public class GameItemModel {
 	private int id;
 	private int gameID;
 	private String item;
 	private int points;
 	private int found;
+	private List<FoundItemModel> findings;
 	
-	public GameItemModel(int id, int gameID, String item, int points, int found) {
+	public GameItemModel(int id, int gameID, String item, int points, int found, List<FoundItemModel> findings) {
 		super();
 		this.id = id;
 		this.gameID = gameID;
 		this.item = item;
 		this.points = points;
 		this.found = found;
+		this.findings = findings;
 	}
 	
 	public GameItemModel() {
@@ -23,6 +33,7 @@ public class GameItemModel {
 		this.item = "";
 		this.points = -1;
 		this.found = -1;
+		this.findings = new ArrayList<FoundItemModel>();
 	}
 
 	public int getId() {
@@ -63,5 +74,13 @@ public class GameItemModel {
 
 	public void setFound(int found) {
 		this.found = found;
+	}
+
+	public List<FoundItemModel> getFindings() {
+		return findings;
+	}
+
+	public void setFindings(List<FoundItemModel> findings) {
+		this.findings = findings;
 	}
 }

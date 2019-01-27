@@ -18,15 +18,27 @@ public class LoggingInterceptor {
 	
 	public LoggingInterceptor(){}
 	
+	/**
+	 * Interceptor for logging entry and exit into any method
+	 * @param pjp
+	 * @return
+	 * @throws Throwable
+	 */
 	public Object runInterceptorLogic(ProceedingJoinPoint pjp) throws Throwable
 	{
+		//Get the package info and the method info
 	    String packageName = pjp.getSignature().getDeclaringTypeName();
 	    String methodName = pjp.getSignature().getName();
-		System.out.println("Entering: " + packageName + "." + methodName);
+	    
+	    //Log the entry into the method
 		logger.info("[INFO] Entering: " + packageName + "." + methodName);
+		
+		//Complete execution of the method
 		Object output = pjp.proceed();
-		System.out.println("Exiting: " + packageName + "." + methodName);
+		
+		//Log exiting the method
 		logger.info("[INFO] Exiting: " + packageName + "." + methodName);
+		
 		return output;
 	}
 }

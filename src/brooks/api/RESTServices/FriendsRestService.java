@@ -34,7 +34,6 @@ public class FriendsRestService {
 	
 	/**
 	 * Sends a friend invite <br>
-	 * URI: /sendInvite
 	 * @param model
 	 * @return RestResponse<Boolean>
 	 */
@@ -68,7 +67,6 @@ public class FriendsRestService {
 	
 	/**
 	 * Accepts a friend invite <br>
-	 * URI: /acceptInvite
 	 * @param model
 	 * @return RestResponse<Boolean>
 	 */
@@ -100,69 +98,106 @@ public class FriendsRestService {
 		else
 			response = new RestResponse<Boolean>(0, "Failure occurred", Boolean.valueOf(status));
 		
+		//Return the response
 		return response;
 	}
 	
+	/**
+	 * Declines a game invite
+	 * @param id
+	 * @return
+	 */
 	@GET
 	@Path("/declineInvite/{id}")
 	@Produces("application/json")
 	public RestResponse<Boolean> declineFriendInvite(@PathParam("id") int id)
 	{
+		//Set up response variables
 		RestResponse<Boolean> response = new RestResponse<Boolean>();
 		boolean status = false;
 		
 		try {
+			//Decline the invite, capture if it was successful or not in the status variable
 			status = service.declineInvite(id);
 		} catch (InviteNotFoundException e) {
+			//If the invite could not be found, send that information back to the user
 			response = new RestResponse<Boolean>(-1, "Invite could not be found", Boolean.valueOf(status));
 			return response;
 		}
 		
+		//Doing one last check to make sure everything went right 
 		if(status)
 			response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
 		else
 			response = new RestResponse<Boolean>(0, "Failure occurred", Boolean.valueOf(status));
 		
+		//Return the response
 		return response;
 	}
 	
+	/**
+	 * Get the invites for a user by their username
+	 * @param username
+	 * @return RestResponse<List<FriendInviteModel>>
+	 */
 	@GET
 	@Path("/getInvites/{username}")
 	@Produces("application/json")
 	public RestResponse<List<FriendInviteModel>> getAllInvites(@PathParam("username") String username)
 	{
+		//Get the list of invites
 		List<FriendInviteModel> friends = service.getInvitesForUsername(username);
 		
+		//Setup the rest response
 		RestResponse<List<FriendInviteModel>> response = new RestResponse<List<FriendInviteModel>>(1, "OK", friends);
 		
+		//Return the response
 		return response;
 	}
 	
+	/**
+	 * Get the friends for a user by their username
+	 * @param username
+	 * @return RestResponse<List<FriendModel>>
+	 */
 	@GET
 	@Path("/getFriends/{username}")
 	@Produces("application/json")
 	public RestResponse<List<FriendModel>> getFriends(@PathParam("username") String username)
 	{
+		//Get the list of friends
 		List<FriendModel> friends = service.getFriends(username);
 		
+		//Setup the rest response
 		RestResponse<List<FriendModel>> response = new RestResponse<List<FriendModel>>(1, "OK", friends);
 		
+		//Return the response
 		return response;
 	}
 	
+	/**
+	 * Removes a friend based on the ID of the relationship (Not the userID of the friend)
+	 * @param id
+	 * @return RestResponse<Boolean>
+	 */
 	@GET
 	@Path("/removeFriend/{id}")
 	@Produces("application/json")
 	public RestResponse<Boolean> removeFriend(@PathParam("id") int id)
 	{
+		//Initialize the response
 		RestResponse<Boolean> response = new RestResponse<Boolean>();
 		
+		//Delete the friendship, capture if it was successful or not
 		boolean status = service.deleteFriendship(id);
+		
+		//Set the response based on if it was successful or not
 		if(status)
 			response = new RestResponse<Boolean>(1, "OK", Boolean.valueOf(status));
 		else
-			response = new RestResponse<Boolean>(0, "Failure occurred", Boolean.valueOf(status));
+			response = new RestResponse<Boolean>(0, "Unable to remove the friend relationship", Boolean.valueOf(status));
 		
+		//Return the response
 		return response;
 	}
 	

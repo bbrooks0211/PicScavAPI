@@ -13,6 +13,11 @@ import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.GameModel;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
+/**
+ * Data access class for game-related operations
+ * @author Brendan Brooks
+ *
+ */
 public class GameDAO implements DataAccessInterface<GameModel> {
 	
 	@SuppressWarnings("unused")

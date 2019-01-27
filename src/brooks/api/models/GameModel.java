@@ -4,6 +4,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Model for a game and all of it's information
+ * @author Brendan Brooks
+ *
+ */
 public class GameModel {
 	private int id;
 	private int hostID;

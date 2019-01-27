@@ -1,5 +1,10 @@
 package brooks.api.models;
 
+/**
+ * Model for friend invites
+ * @author Brendan Brooks
+ *
+ */
 public class FriendInviteModel {
 	private int id;
 	private String sender;

@@ -11,11 +11,22 @@ import brooks.api.business.interfaces.GameBusinessServiceInterface;
 import brooks.api.models.GameModel;
 import brooks.api.models.RestResponse;
 
+/**
+ * Rest service for game data
+ * @author Brendan Brooks
+ *
+ */
 @Path("/game")
 @Service
 public class GameRestService {
+	
 	private static GameBusinessServiceInterface service;
 	
+	/**
+	 * Create a new game
+	 * @param game
+	 * @return RestResponse<Boolean>
+	 */
 	@POST
 	@Path("/create")
 	@Produces("application/json")
