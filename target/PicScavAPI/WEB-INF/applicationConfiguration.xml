@@ -22,11 +22,14 @@
       <property name="suffix" value=".jsp" />
    </bean>
 
+   <bean id="loggingInterceptor" class="brooks.api.utility.interceptors.LoggingInterceptor" />
+
    <aop:aspectj-autoproxy/>
    
-	<aop:config proxy-target-class="true">
+	<aop:config proxy-target-class="true"> 
+		<aop:pointcut id="businessServices" expression="execution(* brooks.api..*.*(..))"/>
         <aop:aspect id="logAll" ref="loggingInterceptor">
-            <aop:around pointcut-ref="userDAO" method="runInterceptorLogic"/>
+            <aop:around pointcut-ref="businessServices" method="runInterceptorLogic"/>
         </aop:aspect>
     </aop:config> 
 <!-- 

@@ -10,24 +10,32 @@ public class FoundItemModel {
 	private int gameID;
 	private int itemID;
 	private int userID;
+	private int points;
 	private String username;
+	private String imageURL;
 	
-	public FoundItemModel(int id, int gameID, int itemID, int userID, String username) {
+
+	
+	public FoundItemModel(int id, int gameID, int itemID, int userID, int points, String username, String imageURL) {
 		super();
 		this.id = id;
 		this.gameID = gameID;
 		this.itemID = itemID;
 		this.userID = userID;
+		this.points = points;
 		this.username = username;
+		this.imageURL = imageURL;
 	}
-	
+
 	public FoundItemModel() {
 		super();
 		this.id = -1;
 		this.gameID = -1;
 		this.itemID = -1;
 		this.userID = -1;
+		this.points = -1;
 		this.username = "";
+		this.imageURL = "";
 	}
 
 	public int getId() {
