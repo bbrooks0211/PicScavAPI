@@ -14,9 +14,10 @@ public class GameInviteModel {
 	private String lobbyName;
 	private long timeRemaining;
 	private int receiverID;
+	private String receiverUsername;
 	
 	public GameInviteModel(int id, int senderID, String senderUsername, int gameID, String lobbyName,
-			long timeRemaining, int receiverID) {
+			long timeRemaining, int receiverID, String receiverUsername) {
 		super();
 		this.id = id;
 		this.senderID = senderID;
@@ -25,6 +26,7 @@ public class GameInviteModel {
 		this.lobbyName = lobbyName;
 		this.timeRemaining = timeRemaining;
 		this.receiverID = receiverID;
+		this.receiverUsername = receiverUsername;
 	}
 	
 	public GameInviteModel(int id, int senderID, int gameID, int receiverID) {
@@ -33,6 +35,8 @@ public class GameInviteModel {
 		this.senderID = senderID;
 		this.gameID = gameID;
 		this.receiverID = receiverID;
+		this.receiverUsername = "";
+		this.senderUsername = "";
 	}
 	
 	public GameInviteModel() {
@@ -44,6 +48,7 @@ public class GameInviteModel {
 		this.lobbyName = "";
 		this.timeRemaining = -1;
 		this.receiverID = -1;
+		this.receiverUsername = "";
 	}
 
 	public int getId() {
@@ -100,5 +105,13 @@ public class GameInviteModel {
 
 	public void setReceiverID(int receiverID) {
 		this.receiverID = receiverID;
+	}
+
+	public String getReceiverUsername() {
+		return receiverUsername;
+	}
+
+	public void setReceiverUsername(String receiverUsername) {
+		this.receiverUsername = receiverUsername;
 	}
 }
