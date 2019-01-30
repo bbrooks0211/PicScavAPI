@@ -27,6 +27,14 @@ public class GameInviteModel {
 		this.receiverID = receiverID;
 	}
 	
+	public GameInviteModel(int id, int senderID, int gameID, int receiverID) {
+		super();
+		this.id = id;
+		this.senderID = senderID;
+		this.gameID = gameID;
+		this.receiverID = receiverID;
+	}
+	
 	public GameInviteModel() {
 		super();
 		this.id = -1;
