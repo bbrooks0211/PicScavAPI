@@ -67,5 +67,6 @@
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/rest/*</url-pattern>
+		<url-pattern>/file/*</url-pattern>
 	</filter-mapping>
 </web-app>
