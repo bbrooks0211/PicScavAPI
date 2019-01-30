@@ -21,4 +21,8 @@
 		<sec:intercept-url pattern="/rest/**" access="ROLE_SYSTEM" />
 		<sec:http-basic />
 	</sec:http>
+	<sec:http auto-config="true">
+		<sec:intercept-url pattern="/file/**" access="ROLE_SYSTEM" />
+		<sec:http-basic />
+	</sec:http>
 </beans>
