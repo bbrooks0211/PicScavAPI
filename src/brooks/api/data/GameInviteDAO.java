@@ -74,7 +74,18 @@ public class GameInviteDAO implements DataAccessInterface<GameInviteModel> {
 	 */
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM gameInvites WHERE id=?";
+		try
+		{
+			int rows = jdbcTemplateObject.update(sql, id);
+			
+			return rows == 1 ? true : false;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
 		return false;
 	}
 
@@ -86,8 +97,20 @@ public class GameInviteDAO implements DataAccessInterface<GameInviteModel> {
 
 	@Override
 	public GameInviteModel findByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM friendInvites WHERE id=?";
+		GameInviteModel invite = new GameInviteModel();
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			if(srs.next())
+			{
+				invite = new GameInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("gameID"), srs.getInt("receiverID"), srs.getInt("accepted"));
+			}
+		} catch(Exception e) {
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
+		return invite;
 	}
 
 	@Override
@@ -100,7 +123,7 @@ public class GameInviteDAO implements DataAccessInterface<GameInviteModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id, 0);
 			while(srs.next())
 			{
-				GameInviteModel invite = new GameInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("gameID"), srs.getInt("receiverID"));
+				GameInviteModel invite = new GameInviteModel(srs.getInt("id"), srs.getInt("senderID"), srs.getInt("gameID"), srs.getInt("receiverID"), srs.getInt("accepted"));
 				list.add(invite);
 			}
 			

@@ -19,7 +19,11 @@ import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.GameModel;
 import brooks.api.utility.TimeUtility;
 
-//For testing purposes only
+/**
+ * For testing purposes only. Will likely never be removed, as it helps in debugging issues with cloud deployment
+ * @author Brendan Brooks
+ *
+ */
 @Controller
 @RequestMapping("/hello")
 public class HelloWorldController 
@@ -28,8 +32,6 @@ public class HelloWorldController
 	/**
 	 * Simple Hello World Controller that returns a String in the response body
 	 * Invoke using /test1 URI.
-	 * 
-	 * @return Hello World test string
 	 */
 	@RequestMapping(path="/test1", method=RequestMethod.GET)		//OR could use @GetMapping("test1")
 	@ResponseBody

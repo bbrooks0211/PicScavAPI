@@ -9,6 +9,7 @@ import brooks.api.business.interfaces.GameBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.GameModel;
 import brooks.api.utility.TimeUtility;
+import brooks.api.utility.exceptions.GameNotFoundException;
 import brooks.api.utility.exceptions.GameTooLongException;
 
 /**
@@ -27,12 +28,16 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	 * @return boolean
 	 */
 	@Override
-	public boolean createNewGame(GameModel game) throws GameTooLongException
+	public boolean createNewGame(GameModel game) throws GameTooLongException, GameNotFoundException
 	{
 		//Ensure that the game time isn't longer than (approximately) a month
 		if(game.getTimeLimit() > 730) {
-			//Throw an error to force this to be dealt with
+			//Throw an exception to force this to be dealt with
 			throw new GameTooLongException();
+		}
+		//Ensure that the game exists, if not, throw an exception
+		else if (!gameExists(game.getId())) {
+			throw new GameNotFoundException();
 		}
 		
 		//Create a date to initialize a new Timestamp
@@ -45,6 +50,22 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		
 		//Create the game by sending it to the data access layer
 		return gameDAO.create(game);
+	}
+	
+	/**
+	 * Checks if a game exists based on the id
+	 * @param int
+	 * @return boolean
+	 */
+	@Override
+	public boolean gameExists(int id) {
+		//Get the game based on the id
+		GameModel game = gameDAO.findByID(id);
+		//If the id is -1, it doesn't exist
+		if(game.getId() == -1)
+			return false;
+		
+		return true;
 	}
 	
 	@Autowired

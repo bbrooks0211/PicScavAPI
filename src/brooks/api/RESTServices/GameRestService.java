@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import brooks.api.business.interfaces.GameBusinessServiceInterface;
 import brooks.api.models.GameModel;
 import brooks.api.models.RestResponse;
+import brooks.api.utility.exceptions.GameNotFoundException;
+import brooks.api.utility.exceptions.GameTooLongException;
 
 /**
  * Rest service for game data
@@ -32,11 +34,20 @@ public class GameRestService {
 	@Produces("application/json")
 	public RestResponse<Boolean> createNewGame(GameModel game) {
 		RestResponse<Boolean> response = new RestResponse<Boolean>();
-		boolean status = service.createNewGame(game);
+		boolean status = false;
+		try {
+			status = service.createNewGame(game);
+		} catch (GameTooLongException e) {
+			response.setAll(-1, "Game length is too long", Boolean.valueOf(false));
+			return response;
+		} catch (GameNotFoundException e) {
+			response.setAll(-2, "Game could not be found with that id", Boolean.valueOf(false));
+			return response;
+		}
 		if(status) {
-			response.setAll(1, "OK", Boolean.valueOf(status));
+			response.setAll(1, "OK", Boolean.valueOf(true));
 		} else {
-			response.setAll(0, "Failed", Boolean.valueOf(status));
+			response.setAll(0, "Failed", Boolean.valueOf(false));
 		}
 		
 		return response;
