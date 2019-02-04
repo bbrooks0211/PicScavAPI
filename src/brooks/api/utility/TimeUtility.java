@@ -12,8 +12,8 @@ public final class TimeUtility {
 	
 	/**
 	 * Adds x amount of hours to a given Timestamp
-	 * @param t 
-	 * @param hours
+	 * @param Timestamp 
+	 * @param long
 	 * @return Timestamp
 	 */
 	public static Timestamp addHoursToTimestamp(Timestamp t, long hours) {

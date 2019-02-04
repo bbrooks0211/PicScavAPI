@@ -2,6 +2,7 @@ package brooks.api.business.interfaces;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.List;
 
 import brooks.api.models.LoginModel;
 import brooks.api.models.RegistrationModel;

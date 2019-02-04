@@ -52,6 +52,14 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return gameDAO.create(game);
 	}
 	
+	@Override
+	public GameModel getGame(int id) throws GameNotFoundException {
+		if(!gameExists(id))
+			throw new GameNotFoundException();
+		
+		return gameDAO.findByID(id);
+	}
+	
 	/**
 	 * Checks if a game exists based on the id
 	 * @param int

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.GameModel;
@@ -63,8 +64,19 @@ public class GameDAO implements DataAccessInterface<GameModel> {
 
 	@Override
 	public GameModel findByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM games WHERE id=?";
+		try {
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			if(srs.next())
+			{
+				GameModel game = new GameModel(srs.getInt("id"), srs.getInt("hostID"), srs.getString("lobbyName"), srs.getString("category"), srs.getLong("timeLimit"), srs.getTimestamp("endTime"), srs.getTimestamp("startTime"));
+				return game;
+			}
+		} catch(Exception e) {
+			logger.error("[ERROR] AN EXCEPTION OCCURRED IN THE DATA ACCESS LAYER \n" + e.getLocalizedMessage() + "\n" + e.getStackTrace());
+		}
+		
+		return new GameModel();
 	}
 
 	@Override

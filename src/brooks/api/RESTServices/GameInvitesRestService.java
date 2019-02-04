@@ -1,7 +1,12 @@
 package brooks.api.RESTServices;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +23,7 @@ public class GameInvitesRestService {
 	private static GameInvitesBusinessServiceInterface service;
 	
 	@POST
-	@Path("sendGameInvite")
+	@Path("/sendGameInvite")
 	@Produces("application/json")
 	public RestResponse<Boolean> sendGameInvite(GameInviteModel model) {
 		RestResponse<Boolean> response = new RestResponse<Boolean>(1, "OK", true);
@@ -30,9 +35,23 @@ public class GameInvitesRestService {
 		}
 		
 		if(status) 
-			response.setAll(0, "Database exception occurred", Boolean.valueOf(false));
+			response.setAll(1, "OK", Boolean.valueOf(true));
 		
 		return response;
+	}
+	
+	@GET
+	@Path("/getGameInvites/{id}")
+	@Produces("application/json")
+	public RestResponse<List<GameInviteModel>> getGameInvites(@PathParam("id") int id) {
+		List<GameInviteModel> invites = new ArrayList<GameInviteModel>();
+		try {
+			invites = service.getInvitesForUser(id);
+		} catch (UserNotFoundException e) {
+			return new RestResponse<List<GameInviteModel>>(-1, "User could not be found with that id", new ArrayList<GameInviteModel>());
+		}
+		
+		return new RestResponse<List<GameInviteModel>>(1, "OK", invites);
 	}
 	
 	@Autowired

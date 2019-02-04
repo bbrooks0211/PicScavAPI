@@ -8,4 +8,6 @@ public interface GameBusinessServiceInterface {
 	public boolean createNewGame(GameModel game) throws GameTooLongException, GameNotFoundException;
 
 	boolean gameExists(int id);
+
+	GameModel getGame(int id) throws GameNotFoundException;
 }

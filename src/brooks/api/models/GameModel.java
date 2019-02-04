@@ -39,6 +39,22 @@ public class GameModel {
 		this.foundItems = foundItems;
 	}
 	
+	public GameModel(int id, int hostID, String lobbyName, String category, long timeLimit,
+			Timestamp endTime, Timestamp startTime) {
+		super();
+		this.id = id;
+		this.hostID = hostID;
+		this.hostUsername = "";
+		this.lobbyName = lobbyName;
+		this.category = category;
+		this.timeLimit = timeLimit;
+		this.endTime = endTime;
+		this.startTime = startTime;
+		this.players = new ArrayList<PlayerModel>();
+		this.items = new ArrayList<GameItemModel>();
+		this.foundItems = new ArrayList<FoundItemModel>();
+	}
+	
 	public GameModel() {
 		super();
 		this.id = -1;

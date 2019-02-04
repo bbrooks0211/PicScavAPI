@@ -2,6 +2,8 @@ package brooks.api.business;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import brooks.api.business.interfaces.GameBusinessServiceInterface;
@@ -9,11 +11,13 @@ import brooks.api.business.interfaces.GameInvitesBusinessServiceInterface;
 import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.GameInviteModel;
+import brooks.api.models.GameModel;
 import brooks.api.models.PlayerModel;
 import brooks.api.models.UserModel;
 import brooks.api.utility.exceptions.InviteAlreadyAcceptedException;
 import brooks.api.utility.exceptions.InviteNotFoundException;
 import brooks.api.utility.exceptions.UserNotFoundException;
+import brooks.api.utility.interceptors.LoggingInterceptor;
 import brooks.api.utility.exceptions.GameNotFoundException;
 
 /**
@@ -27,6 +31,9 @@ public class GameInvitesBusinessService implements GameInvitesBusinessServiceInt
 	private DataAccessInterface<PlayerModel> playerDAO;
 	private GameBusinessServiceInterface gameService;
 	private UserBusinessServiceInterface userService;
+	
+	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
+
 
 	/**
 	 * Sends a game invite to the user
@@ -107,8 +114,38 @@ public class GameInvitesBusinessService implements GameInvitesBusinessServiceInt
 		//Check if the user exists, throw an exception if not
 		if (user.getId() == -1) 
 			throw new UserNotFoundException();
+		
+		//Get the list
+		List<GameInviteModel> list = dao.findAllForID(id);
+		
+		//Set the usernames
+		this.setNamesForInvites(list);
+		
 		//Return the list
-		return dao.findAllForID(id);
+		return list;
+	}
+	
+	/**
+	 * Sets the usernames and lobby name for a lsit of invites
+	 * @param list
+	 * @return List
+	 */
+	private List<GameInviteModel> setNamesForInvites(List<GameInviteModel> list) {
+		for(GameInviteModel invite : list) {
+			UserModel sender = userService.findByID(invite.getSenderID());
+			UserModel receiver = userService.findByID(invite.getReceiverID());
+			try {
+				GameModel game = gameService.getGame(invite.getGameID());
+				invite.setLobbyName(game.getLobbyName());
+			} catch (GameNotFoundException e) {
+				logger.error("[ERROR] A GAME COULD NOT BE FOUND FROM AN ID RETRIEVED FROM THE GAME INVITES TABLE \n" + e.getStackTrace());
+			}
+			
+			invite.setSenderUsername(sender.getUsername());
+			invite.setReceiverUsername(receiver.getUsername());
+		}
+		
+		return list;
 	}
 
 	@Autowired
