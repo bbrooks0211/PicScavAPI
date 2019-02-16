@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import brooks.api.business.interfaces.GameInvitesBusinessServiceInterface;
 import brooks.api.models.GameInviteModel;
 import brooks.api.models.RestResponse;
+import brooks.api.utility.exceptions.GameNotFoundException;
+import brooks.api.utility.exceptions.InviteAlreadyAcceptedException;
+import brooks.api.utility.exceptions.InviteNotFoundException;
 import brooks.api.utility.exceptions.UserNotFoundException;
 
 @Path("/game")
@@ -52,6 +55,38 @@ public class GameInvitesRestService {
 		}
 		
 		return new RestResponse<List<GameInviteModel>>(1, "OK", invites);
+	}
+	
+	@GET
+	@Path("/acceptInvite/{id}")
+	@Produces("application/json")
+	public RestResponse<Boolean> acceptInvite(@PathParam("id") int id) {
+		try {
+			service.acceptInvite(id);
+		} catch (InviteNotFoundException e) {
+			return new RestResponse<Boolean>(-1, "Invite could not be found", Boolean.valueOf(false));
+		} catch (InviteAlreadyAcceptedException e) {
+			return new RestResponse<Boolean>(-2, "Invite has already been accepted", Boolean.valueOf(false));
+		} catch (GameNotFoundException e) {
+			return new RestResponse<Boolean>(-3, "The game could not be found", Boolean.valueOf(false));
+		}
+		
+		return new RestResponse<Boolean>(1, "OK", Boolean.valueOf(true));
+	}
+	
+	@GET
+	@Path("/declineInvite/{id}")
+	@Produces("application/json")
+	public RestResponse<Boolean> declineInvite(@PathParam("id") int id) {
+		try {
+			service.declineInvite(id);
+		} catch (InviteNotFoundException e) {
+			return new RestResponse<Boolean>(-1, "Invite could not be found", Boolean.valueOf(false));
+		} catch (InviteAlreadyAcceptedException e) {
+			return new RestResponse<Boolean>(-2, "Invite has already been accepted", Boolean.valueOf(false));
+		}
+		
+		return new RestResponse<Boolean>(1, "OK", Boolean.valueOf(true));
 	}
 	
 	@Autowired

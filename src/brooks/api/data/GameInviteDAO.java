@@ -52,7 +52,7 @@ public class GameInviteDAO implements DataAccessInterface<GameInviteModel> {
 	 */
 	@Override
 	public boolean update(GameInviteModel model) {
-		String sql = "UPDATE gameItems SET accepted=1 WHERE id=?";
+		String sql = "UPDATE gameInvites SET accepted=1 WHERE id=?";
 		try
 		{
 			int rows = jdbcTemplateObject.update(sql, model.getId());
@@ -97,7 +97,7 @@ public class GameInviteDAO implements DataAccessInterface<GameInviteModel> {
 
 	@Override
 	public GameInviteModel findByID(int id) {
-		String sql = "SELECT * FROM friendInvites WHERE id=?";
+		String sql = "SELECT * FROM gameInvites WHERE id=?";
 		GameInviteModel invite = new GameInviteModel();
 		try
 		{
