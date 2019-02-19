@@ -76,12 +76,12 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 
 	@Override
 	public ItemModel find(ItemModel model) {
-		String sql = "SELECT * FROM items WHERE item=?";
+		String sql = "SELECT * FROM items WHERE item=? AND category=?";
 		ItemModel item = new ItemModel();
 		
 		try
 		{
-			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getItem());
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getItem(), model.getCategory());
 			if(srs.next())
 			{
 				item = new ItemModel(srs.getInt("id"), srs.getString("category"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "");
