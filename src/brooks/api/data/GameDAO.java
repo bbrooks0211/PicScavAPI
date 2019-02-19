@@ -81,7 +81,6 @@ public class GameDAO implements DataAccessInterface<GameModel> {
 
 	@Override
 	public List<GameModel> findAllForID(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -95,6 +94,12 @@ public class GameDAO implements DataAccessInterface<GameModel> {
 	private void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public List<GameModel> findAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

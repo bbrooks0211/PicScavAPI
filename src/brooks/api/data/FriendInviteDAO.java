@@ -187,4 +187,10 @@ public class FriendInviteDAO implements DataAccessInterface<FriendInviteModel> {
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
+
+	@Override
+	public List<FriendInviteModel> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

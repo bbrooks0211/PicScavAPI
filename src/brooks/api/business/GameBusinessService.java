@@ -2,6 +2,7 @@ package brooks.api.business;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -50,6 +51,12 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		
 		//Create the game by sending it to the data access layer
 		return gameDAO.create(game);
+	}
+	
+	public List<GameModel> getGames(int userID) {
+		List<GameModel> list = gameDAO.findAllForID(userID);
+		
+		return list;
 	}
 	
 	@Override

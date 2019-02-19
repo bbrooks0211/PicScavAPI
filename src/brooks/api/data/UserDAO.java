@@ -84,6 +84,7 @@ public class UserDAO implements UserDataAccessInterface{
 	@Override
 	public boolean delete(int id) {
 		String sql = "DELETE FROM users WHERE id=?";
+		
 		try
 		{
 			int rows = jdbcTemplateObject.update(sql, id);
@@ -202,12 +203,6 @@ public class UserDAO implements UserDataAccessInterface{
 			return new UserModel();
 		}
 	}
-	
-	@Autowired
-	private void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
-	}
 
 	@Override
 	public List<RegistrationModel> findAllForID(int id) {
@@ -246,4 +241,15 @@ public class UserDAO implements UserDataAccessInterface{
 		}
 	}
 	
+	@Override
+	public List<RegistrationModel> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Autowired
+	private void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+	}
 }

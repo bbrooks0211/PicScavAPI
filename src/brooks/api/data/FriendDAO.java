@@ -140,6 +140,11 @@ public class FriendDAO implements DataAccessInterface<FriendModel> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public List<FriendModel> findAll() {
+		return null;
+	}
 
 	@Autowired
 	private void setDataSource(DataSource dataSource) {

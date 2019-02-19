@@ -106,4 +106,10 @@ public class GamePlayerDAO implements DataAccessInterface<PlayerModel>{
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
+
+	@Override
+	public List<PlayerModel> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

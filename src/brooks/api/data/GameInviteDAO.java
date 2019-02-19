@@ -145,4 +145,10 @@ public class GameInviteDAO implements DataAccessInterface<GameInviteModel> {
 		this.dataSource = dataSource;
 		this.jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
+
+	@Override
+	public List<GameInviteModel> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

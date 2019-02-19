@@ -58,4 +58,6 @@ public interface DataAccessInterface<T> {
 	 * @return List<T>
 	 */
 	public List<T> findAllByString(String string);
+	
+	public List<T> findAll();
 }
