@@ -1,5 +1,7 @@
 package brooks.api.controllers;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,9 +19,15 @@ public class AdminController {
 	
 	ItemReferenceBusinessServiceInterface itemService;
 	
+	private int token = 123456789;
+	
+	@Autowired
+	private HttpSession httpSession;
+	
 	@RequestMapping(path= { "/", "/main" }, method=RequestMethod.GET)
 	public ModelAndView displayAdminPage() {
 		ModelAndView mv = new ModelAndView();
+		httpSession.setAttribute("token", token);
 		mv.setViewName("admin");
 		mv.addObject("item", new ItemModel());
 		return mv;
@@ -28,6 +36,11 @@ public class AdminController {
 	@RequestMapping(path="/addItem", method=RequestMethod.POST)
 	public ModelAndView loginUser(@ModelAttribute("item")ItemModel item) {
 		ModelAndView mv = new ModelAndView();
+		if(!tokenIsValid(true)) {
+			mv.setViewName("redirect: main");
+			return mv;
+		}
+
 		mv.setViewName("redirect: main");
 		item.setCreatorID(1);
 		boolean status = false;
@@ -51,9 +64,25 @@ public class AdminController {
 	@RequestMapping(path="/sendLoginRequest", method=RequestMethod.POST)
 	public ModelAndView loginUser() {
 		ModelAndView mv = new ModelAndView();
-		
+		if(!tokenIsValid(true)) {
+			mv.setViewName("redirect: main");
+			return mv;
+		}
 		return mv;
 	}
+	
+	private boolean tokenIsValid(boolean deleteTokenAfter) {
+		int retrievedToken = -1;
+		if (httpSession.getAttribute("token") != null) {
+			retrievedToken = (int) httpSession.getAttribute("token");	
+		}
+		if (retrievedToken != token)
+			return false;	
+		if (deleteTokenAfter)
+			httpSession.removeAttribute("token");
+		System.out.println("token is valid");
+		return true;
+	} 
 	
 	@Autowired
 	public void setItemService(ItemReferenceBusinessServiceInterface service) {
