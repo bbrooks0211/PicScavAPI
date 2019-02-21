@@ -11,6 +11,6 @@ public interface ItemReferenceBusinessServiceInterface {
 	public boolean deleteItem(int id);
 	public ItemModel getItem(ItemModel model);
 	public ItemModel getItem(int id);
-	public List<ItemModel> getAllForCategory(String username);
+	public List<ItemModel> getAllForCategory(String category);
 	public List<ItemModel> getAllItems();
 }

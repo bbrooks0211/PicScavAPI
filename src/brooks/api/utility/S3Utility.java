@@ -21,8 +21,7 @@ import brooks.api.utility.interfaces.s3UtilityInterface;
 /**
  * Utility service for Amazon S3
  * <br>
- * Credit to: https://grokonez.com/aws/amazon-s3/amazon-s3-springboot-restapis-upload-download-file-image-to-s3
- * @author Brendan Brooks
+ * <a href="https://grokonez.com/aws/amazon-s3/amazon-s3-springboot-restapis-upload-download-file-image-to-s3">Credit</a>
  *
  */
 public class S3Utility implements s3UtilityInterface{

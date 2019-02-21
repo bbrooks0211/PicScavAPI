@@ -9,12 +9,22 @@ import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.ItemModel;
 import brooks.api.utility.exceptions.ItemAlreadyExistsException;
 
+/**
+ * Business service class for getting the items to use as a reference, for things such as generating the item lists for newly created games, etc.
+ * @author Brendan Brooks
+ *
+ */
 public class ItemReferenceBusinessService implements ItemReferenceBusinessServiceInterface {
 	
 	private DataAccessInterface<ItemModel> itemDAO;
 
+	/**
+	 * Add an item to the pool of categorized items
+	 * @param item
+	 */
 	@Override
 	public boolean addItem(ItemModel item) throws ItemAlreadyExistsException {
+		//Check if the item already exists within the category
 		if(itemAlreadyExists(item))
 			throw new ItemAlreadyExistsException();
 		
@@ -36,7 +46,7 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 	@Override
 	public ItemModel getItem(ItemModel model) {
 		// TODO Auto-generated method stub
-		return null;
+		return itemDAO.find(model);
 	}
 
 	@Override
@@ -46,9 +56,9 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 	}
 
 	@Override
-	public List<ItemModel> getAllForCategory(String username) {
+	public List<ItemModel> getAllForCategory(String category) {
 		// TODO Auto-generated method stub
-		return null;
+		return itemDAO.findAllByString(category);
 	}
 
 	@Override
@@ -57,9 +67,17 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 		return null;
 	}
 	
+	/**
+	 * Checks if an item already exists (within its category)
+	 * @param item
+	 * @return boolean
+	 */
 	private boolean itemAlreadyExists(ItemModel item) {
+		
+		//Attempt to retrieve the item from the database
 		ItemModel model = itemDAO.find(item);
 		
+		//ID of -1 means the database could not find anything
 		if(model.getId() == -1)
 			return false;
 		

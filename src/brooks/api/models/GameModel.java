@@ -18,12 +18,13 @@ public class GameModel {
 	private long timeLimit;
 	private Timestamp endTime;
 	private Timestamp startTime;
+	private int numberOfItems;
 	private List<PlayerModel> players;
 	private List<GameItemModel> items;
 	private List<FoundItemModel> foundItems;
 	
 	public GameModel(int id, int hostID, String hostUsername, String lobbyName, String category, long timeLimit,
-			Timestamp endTime, Timestamp startTime, List<PlayerModel> players, List<GameItemModel> items,
+			Timestamp endTime, Timestamp startTime, int numberOfItems, List<PlayerModel> players, List<GameItemModel> items,
 			List<FoundItemModel> foundItems) {
 		super();
 		this.id = id;
@@ -37,6 +38,24 @@ public class GameModel {
 		this.players = players;
 		this.items = items;
 		this.foundItems = foundItems;
+		this.numberOfItems = numberOfItems;
+	}
+	
+	public GameModel(int id, int hostID, String lobbyName, String category, long timeLimit,
+			Timestamp endTime, Timestamp startTime, int numberOfItems) {
+		super();
+		this.id = id;
+		this.hostID = hostID;
+		this.hostUsername = "";
+		this.lobbyName = lobbyName;
+		this.category = category;
+		this.timeLimit = timeLimit;
+		this.endTime = endTime;
+		this.startTime = startTime;
+		this.numberOfItems = numberOfItems;
+		this.players = new ArrayList<PlayerModel>();
+		this.items = new ArrayList<GameItemModel>();
+		this.foundItems = new ArrayList<FoundItemModel>();
 	}
 	
 	public GameModel(int id, int hostID, String lobbyName, String category, long timeLimit,
@@ -50,6 +69,7 @@ public class GameModel {
 		this.timeLimit = timeLimit;
 		this.endTime = endTime;
 		this.startTime = startTime;
+		this.numberOfItems = -1;
 		this.players = new ArrayList<PlayerModel>();
 		this.items = new ArrayList<GameItemModel>();
 		this.foundItems = new ArrayList<FoundItemModel>();
@@ -157,4 +177,13 @@ public class GameModel {
 	public void setFoundItems(List<FoundItemModel> foundItems) {
 		this.foundItems = foundItems;
 	}
+
+	public int getNumberOfItems() {
+		return numberOfItems;
+	}
+
+	public void setNumberOfItems(int numberOfItems) {
+		this.numberOfItems = numberOfItems;
+	}
+	
 }

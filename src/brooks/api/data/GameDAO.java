@@ -1,5 +1,6 @@
 package brooks.api.data;
 
+import java.sql.Statement;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import brooks.api.data.interfaces.DataAccessInterface;
+import brooks.api.data.interfaces.GameDAOInterface;
 import brooks.api.models.GameModel;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
@@ -19,12 +21,35 @@ import brooks.api.utility.interceptors.LoggingInterceptor;
  * @author Brendan Brooks
  *
  */
-public class GameDAO implements DataAccessInterface<GameModel> {
+public class GameDAO implements GameDAOInterface {
 	
 	@SuppressWarnings("unused")
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplateObject;
 	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
+	
+	@Override
+	public int createAndReturnID(GameModel model) {
+		String sql = "INSERT INTO games(hostID, lobbyName, hostUsername, category, timeLimit, endTime, startTime) VALUES(?, ?, ?, ?, ?, ?, ?)";
+		int id = -1;
+		try
+		{
+			int rows = jdbcTemplateObject.update(sql, model.getHostID(), model.getLobbyName(), model.getHostUsername(), model.getCategory(), model.getTimeLimit(), model.getEndTime(), model.getStartTime());
+			if(rows == 1) {
+				String queryID = "SELECT LAST_INSERT_ID() FROM games";
+				SqlRowSet srs = jdbcTemplateObject.queryForRowSet(queryID);
+				if(srs.next())
+					id = srs.getInt("LAST_INSERT_ID()");
+			}
+			return id;
+		} catch(Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
+		}
+		
+		return id;
+	}
 
 	@Override
 	public boolean create(GameModel model) {
