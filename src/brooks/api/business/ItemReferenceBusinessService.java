@@ -27,7 +27,7 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 		//Check if the item already exists within the category
 		if(itemAlreadyExists(item))
 			throw new ItemAlreadyExistsException();
-		
+		item.setCategory(item.getCategory().toLowerCase());
 		return itemDAO.create(item);
 	}
 
@@ -57,8 +57,8 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 
 	@Override
 	public List<ItemModel> getAllForCategory(String category) {
-		// TODO Auto-generated method stub
-		return itemDAO.findAllByString(category);
+		
+		return itemDAO.findAllByString(category.toLowerCase());
 	}
 
 	@Override

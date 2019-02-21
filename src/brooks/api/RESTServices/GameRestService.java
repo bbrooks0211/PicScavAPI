@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import brooks.api.business.interfaces.GameBusinessServiceInterface;
 import brooks.api.models.GameModel;
 import brooks.api.models.RestResponse;
+import brooks.api.utility.exceptions.FailureToCreateException;
 import brooks.api.utility.exceptions.GameNotFoundException;
 import brooks.api.utility.exceptions.GameTooLongException;
+import brooks.api.utility.exceptions.NotEnoughItemsException;
 
 /**
  * Rest service for game data
@@ -43,6 +45,10 @@ public class GameRestService {
 		} catch (GameNotFoundException e) {
 			response.setAll(-2, "Game could not be found with that id", Boolean.valueOf(false));
 			return response;
+		} catch (FailureToCreateException e) {
+			response.setAll(-3, "Game failed to create", Boolean.valueOf(false));
+		} catch (NotEnoughItemsException e) {
+			response.setAll(-4, "Not enough items in category for desired number of game items", Boolean.valueOf(false));
 		}
 		if(status) {
 			response.setAll(1, "OK", Boolean.valueOf(true));

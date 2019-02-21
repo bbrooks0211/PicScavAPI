@@ -4,18 +4,26 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import brooks.api.business.interfaces.GameBusinessServiceInterface;
+import brooks.api.business.interfaces.GameItemsServiceInterface;
 import brooks.api.business.interfaces.ItemReferenceBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.data.interfaces.GameDAOInterface;
 import brooks.api.models.GameItemModel;
 import brooks.api.models.GameModel;
+import brooks.api.models.ItemModel;
 import brooks.api.utility.TimeUtility;
+import brooks.api.utility.exceptions.FailureToCreateException;
 import brooks.api.utility.exceptions.GameNotFoundException;
 import brooks.api.utility.exceptions.GameTooLongException;
+import brooks.api.utility.exceptions.NotEnoughItemsException;
+import brooks.api.utility.interceptors.LoggingInterceptor;
 
 /**
  * Business Service for game logic, etc.
@@ -25,16 +33,21 @@ import brooks.api.utility.exceptions.GameTooLongException;
 public class GameBusinessService implements GameBusinessServiceInterface {
 	
 	private GameDAOInterface gameDAO;
-	private ItemReferenceBusinessServiceInterface itemRefService;
+	private ItemReferenceBusinessServiceInterface itemService;
+	private GameItemsServiceInterface gameItemsService;
+	
+	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
 	/**
 	 * Creates a new game from a game model
 	 * @param game
 	 * @throws GameTooLondException
 	 * @return boolean
+	 * @throws FailureToCreateException 
+	 * @throws NotEnoughItemsException 
 	 */
 	@Override
-	public boolean createNewGame(GameModel game) throws GameTooLongException
+	public boolean createNewGame(GameModel game) throws GameTooLongException, FailureToCreateException, NotEnoughItemsException
 	{
 		//Ensure that the game time isn't longer than (approximately) a month
 		if(game.getTimeLimit() > 730) {
@@ -49,7 +62,29 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		game.setStartTime(time);
 		//Set the end time for the game by adding the length 
 		game.setEndTime(TimeUtility.addHoursToTimestamp(time, game.getTimeLimit()));
+		//Create the game and return the ID
 		int gameID = gameDAO.createAndReturnID(game);
+		
+		//If the game failed to create, throw an exception
+		if(gameID == -1)
+			throw new FailureToCreateException();
+		
+		try {
+			//Create the game items
+			generateGameItems(gameID, game.getNumberOfItems(), game.getCategory());
+		} catch (FailureToCreateException | NotEnoughItemsException e) {
+			logger.error("[ERROR] EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n" + e.getStackTrace());
+			
+			//Delete the created game since it couldn't be created
+			gameDAO.delete(gameID);
+			
+			//Rethrow the exceptions
+			if(e instanceof NotEnoughItemsException)
+				throw new NotEnoughItemsException();
+
+			throw new FailureToCreateException();
+		}
+		
 		//Create the game by sending it to the data access layer
 		return true;
 	}
@@ -84,10 +119,25 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return true;
 	}
 	
-	private List<GameItemModel> generateGameItems(int gameID, int numberOfItems, String category) {
+	private boolean generateGameItems(int gameID, int numberOfItems, String category) throws FailureToCreateException, NotEnoughItemsException {
 		List<GameItemModel> list = new ArrayList<GameItemModel>();
+		List<ItemModel> fullItemList = new ArrayList<ItemModel>();
+		fullItemList = itemService.getAllForCategory(category);
+		Random r = new Random();
 		
-		return list;
+		if(fullItemList.size() < numberOfItems)
+			throw new NotEnoughItemsException();
+		
+		for(int i = 0; i < numberOfItems; i++)
+		{
+			ItemModel item = fullItemList.remove(r.nextInt(fullItemList.size()));
+			list.add(new GameItemModel(-1, gameID, item.getItem(), item.getPoints(), 0, null));
+		}
+		
+		if(!gameItemsService.create(list))
+			throw new FailureToCreateException();
+		
+		return true;
 	}
 	
 	@Autowired
@@ -96,7 +146,12 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	}
 	
 	@Autowired
-	private void setItemRefService(ItemReferenceBusinessServiceInterface service) {
-		this.itemRefService = service;
-	}	
+	public void setItemService(ItemReferenceBusinessServiceInterface service) {
+		this.itemService = service;
+	}
+	
+	@Autowired
+	public void setGameItemsService(GameItemsServiceInterface service) {
+		this.gameItemsService = service;
+	}
 }

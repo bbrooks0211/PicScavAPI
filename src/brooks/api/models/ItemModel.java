@@ -1,5 +1,10 @@
 package brooks.api.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * General item model
  * @author Brendan Brooks
@@ -8,8 +13,15 @@ package brooks.api.models;
 public class ItemModel {
 	
 	private int id;
+	@NotNull(message="Category is required")
+	@Size(min=1, max=300, message="Category must be between 1 and 100 characters")
 	private String category;
+	@NotNull(message="Item is required")
+	@Size(min=1, max=300, message="Item must be between 1 and 100 characters")
 	private String item;
+	@NotNull(message="Points is a required field")
+	@Min(value=1, message="Points must be at least 1")
+	@Max(value=9999, message="Points cannot be over 9999")
 	private int points;
 	private int creatorID;
 	private String creatorUsername;
@@ -29,7 +41,7 @@ public class ItemModel {
 		this.id = -1;
 		this.category = "";
 		this.item = "";
-		this.points = -1;
+		this.points = 0;
 		this.creatorID = -1;
 		this.creatorUsername = "";
 	}

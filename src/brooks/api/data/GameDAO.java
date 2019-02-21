@@ -77,7 +77,19 @@ public class GameDAO implements GameDAOInterface {
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM games WHERE id=?";
+		
+		try
+		{
+			int rows = jdbcTemplateObject.update(sql, id);
+			
+			return rows == 1 ? true : false;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
 		return false;
 	}
 

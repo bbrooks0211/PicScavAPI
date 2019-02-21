@@ -42,10 +42,11 @@
 					<form:input class="form-control" path="category" />
 				</div>
 				<div class="form-group">
-					<form:label path="points">Points</form:label>
-					<form:input class="form-control" path="points" value="5" />
+					<form:label path="points">points</form:label>
+					<form:input class="form-control" path="points" value="" />
 				</div>
-				<input type="submit" class="btn btn-light">
+				<p><form:errors path="*" /></p>
+				<input type="submit" class="btn btn-default">
 			</form:form>
 		</div>
 	</div>
