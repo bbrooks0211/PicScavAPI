@@ -29,7 +29,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 		
 		try
 		{
-			int rows = jdbcTemplateObject.update(sql, model.getCategory(), model.getItem(), model.getPoints(), model.getCreatorID());
+			int rows = jdbcTemplateObject.update(sql, model.getItem(), model.getPoints(), model.getCreatorID());
 			
 			return rows == 1 ? true : false;
 		} catch(Exception e) {
@@ -45,7 +45,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 		String sql = "UPDATE items SET category=?, item=?, points=?, creatorID=? WHERE id=?";
 		try
 		{
-			int rows = jdbcTemplateObject.update(sql, model.getCategory(), model.getItem(), model.getPoints(), model.getCreatorID(), model.getId());
+			int rows = jdbcTemplateObject.update(sql, model.getItem(), model.getPoints(), model.getCreatorID());
 			
 			return rows == 1 ? true : false;
 		} catch(Exception e) {
@@ -84,7 +84,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getItem(), model.getCategory());
 			if(srs.next())
 			{
-				item = new ItemModel(srs.getInt("id"), srs.getString("category"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "");
+				item = new ItemModel(srs.getInt("id"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "", srs.getInt("categoryID"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -104,7 +104,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
 			if(srs.next())
 			{
-				item = new ItemModel(srs.getInt("id"), srs.getString("category"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "");
+				item = new ItemModel(srs.getInt("id"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "", srs.getInt("categoryID"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -116,8 +116,23 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 
 	@Override
 	public List<ItemModel> findAllForID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM items WHERE categoryID=?";
+		List<ItemModel> list = new ArrayList<ItemModel>();
+		
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			while(srs.next())
+			{
+				ItemModel item = new ItemModel(srs.getInt("id"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "", srs.getInt("categoryID"));
+				list.add(item);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
+		return list;
 	}
 
 	@Override
@@ -131,7 +146,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, string);
 			while(srs.next())
 			{
-				ItemModel item = new ItemModel(srs.getInt("id"), srs.getString("category"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "");
+				ItemModel item = new ItemModel(srs.getInt("id"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "", srs.getInt("categoryID"));
 				list.add(item);
 			}
 		} catch(Exception e) {
@@ -153,7 +168,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql);
 			while(srs.next())
 			{
-				ItemModel item = new ItemModel(srs.getInt("id"), srs.getString("category"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "");
+				ItemModel item = new ItemModel(srs.getInt("id"), srs.getString("item"), srs.getInt("points"), srs.getInt("creatorID"), "", srs.getInt("categoryID"));
 				list.add(item);
 			}
 		} catch(Exception e) {

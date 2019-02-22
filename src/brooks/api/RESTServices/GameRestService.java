@@ -47,9 +47,12 @@ public class GameRestService {
 			return response;
 		} catch (FailureToCreateException e) {
 			response.setAll(-3, "Game failed to create", Boolean.valueOf(false));
+			return response;
 		} catch (NotEnoughItemsException e) {
 			response.setAll(-4, "Not enough items in category for desired number of game items", Boolean.valueOf(false));
+			return response;
 		}
+		
 		if(status) {
 			response.setAll(1, "OK", Boolean.valueOf(true));
 		} else {

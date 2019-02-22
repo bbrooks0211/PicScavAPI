@@ -13,4 +13,5 @@ public interface ItemReferenceBusinessServiceInterface {
 	public ItemModel getItem(int id);
 	public List<ItemModel> getAllForCategory(String category);
 	public List<ItemModel> getAllItems();
+	List<ItemModel> getAllForCategoryID(int id);
 }

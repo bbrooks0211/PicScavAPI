@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import brooks.api.business.interfaces.CategoryServiceInterface;
 import brooks.api.business.interfaces.ItemReferenceBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.models.ItemModel;
@@ -17,6 +18,7 @@ import brooks.api.utility.exceptions.ItemAlreadyExistsException;
 public class ItemReferenceBusinessService implements ItemReferenceBusinessServiceInterface {
 	
 	private DataAccessInterface<ItemModel> itemDAO;
+	private CategoryServiceInterface categoryService;
 
 	/**
 	 * Add an item to the pool of categorized items
@@ -60,6 +62,11 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 		
 		return itemDAO.findAllByString(category.toLowerCase());
 	}
+	
+	@Override
+	public List<ItemModel> getAllForCategoryID(int id) {
+		return itemDAO.findAllForID(id);
+	}
 
 	@Override
 	public List<ItemModel> getAllItems() {
@@ -87,6 +94,11 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 	@Autowired
 	public void setItemDAO(DataAccessInterface<ItemModel> dao) {
 		this.itemDAO = dao;
+	}
+	
+	@Autowired
+	private void setCategoryService(CategoryServiceInterface service) {
+		this.categoryService = service;
 	}
 
 }

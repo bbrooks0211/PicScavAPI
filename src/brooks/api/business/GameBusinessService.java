@@ -39,7 +39,7 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
 	/**
-	 * Creates a new game from a game model
+	 * Creates a new game from a game model. Creates the items and sends the invites. 
 	 * @param game
 	 * @throws GameTooLondException
 	 * @return boolean
@@ -128,6 +128,7 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		if(fullItemList.size() < numberOfItems)
 			throw new NotEnoughItemsException();
 		
+		//Simple loop that gets a random item from the list. Could be more advanced by shuffling the list before pulling an item from it. 
 		for(int i = 0; i < numberOfItems; i++)
 		{
 			ItemModel item = fullItemList.remove(r.nextInt(fullItemList.size()));

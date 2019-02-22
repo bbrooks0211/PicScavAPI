@@ -24,9 +24,10 @@ public class ItemModel {
 	@Max(value=9999, message="Points cannot be over 9999")
 	private int points;
 	private int creatorID;
+	private int categoryID;
 	private String creatorUsername;
 	
-	public ItemModel(int id, String category, String item, int points, int creatorID, String creatorUsername) {
+	public ItemModel(int id, String category, String item, int points, int creatorID, String creatorUsername, int categoryID) {
 		super();
 		this.id = id;
 		this.category = category;
@@ -34,6 +35,17 @@ public class ItemModel {
 		this.points = points;
 		this.creatorID = creatorID;
 		this.creatorUsername = creatorUsername;
+		this.categoryID = categoryID;
+	}
+	
+	public ItemModel(int id, String item, int points, int creatorID, String creatorUsername, int categoryID) {
+		super();
+		this.id = id;
+		this.item = item;
+		this.points = points;
+		this.creatorID = creatorID;
+		this.creatorUsername = creatorUsername;
+		this.categoryID = categoryID;
 	}
 	
 	public ItemModel() {
@@ -44,6 +56,7 @@ public class ItemModel {
 		this.points = 0;
 		this.creatorID = -1;
 		this.creatorUsername = "";
+		this.categoryID = -1;
 	}
 
 	public int getId() {
@@ -93,4 +106,13 @@ public class ItemModel {
 	public void setCreatorUsername(String creatorUsername) {
 		this.creatorUsername = creatorUsername;
 	}
+
+	public int getCategoryID() {
+		return categoryID;
+	}
+
+	public void setCategoryID(int categoryID) {
+		this.categoryID = categoryID;
+	}
+	
 }
