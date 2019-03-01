@@ -1,5 +1,6 @@
 package brooks.api.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -53,8 +54,22 @@ public class CategoryDAO implements DataAccessInterface<CategoryModel> {
 
 	@Override
 	public CategoryModel find(CategoryModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM categories WHERE name=?";
+		CategoryModel category = new CategoryModel();
+
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getName());
+			if(srs.next())
+			{
+				category = new CategoryModel(srs.getInt("id"), srs.getString("name"), srs.getInt("paid"));
+				return category;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		return category;
 	}
 
 	@Override
@@ -78,8 +93,22 @@ public class CategoryDAO implements DataAccessInterface<CategoryModel> {
 
 	@Override
 	public List<CategoryModel> findAllForID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM categories WHERE id=?";
+		List<CategoryModel> list = new ArrayList<CategoryModel>();
+		CategoryModel category = new CategoryModel();
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			while(srs.next())
+			{
+				list.add(new CategoryModel(srs.getInt("id"), srs.getString("name"), srs.getInt("paid")));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		
+		return list;
 	}
 
 	@Override

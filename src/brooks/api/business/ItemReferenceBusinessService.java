@@ -59,7 +59,11 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 
 	@Override
 	public List<ItemModel> getAllForCategory(String category) {
+		//Get the category object from it's name
 		
+		//Ensure that it exists
+		
+		//Find all by the category ID
 		return itemDAO.findAllByString(category.toLowerCase());
 	}
 	
