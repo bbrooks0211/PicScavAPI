@@ -33,6 +33,11 @@ public class GameItemsBusinessService implements GameItemsServiceInterface {
 		return status;
 	}
 	
+	@Override
+	public List<GameItemModel> getItemsForGame(int gameID) {
+		return gameItemDAO.findAllForID(gameID);
+	}
+	
 	@Autowired
 	private void setGameItemDAO(DataAccessInterface<GameItemModel> dao) {
 		this.gameItemDAO = dao;

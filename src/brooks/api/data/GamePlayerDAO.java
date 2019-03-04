@@ -85,7 +85,7 @@ public class GamePlayerDAO implements DataAccessInterface<PlayerModel>{
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
 			while(srs.next())
 			{
-				PlayerModel model = new PlayerModel(srs.getInt("id"), srs.getInt("userID"), srs.getInt("gameID"));
+				PlayerModel model = new PlayerModel(srs.getInt("id"), srs.getInt("userID"), "name", srs.getInt("points"), srs.getInt("gameID"));
 				list.add(model);
 			}
 		} catch (Exception e) {

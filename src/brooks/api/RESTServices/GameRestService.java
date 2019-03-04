@@ -1,7 +1,12 @@
 package brooks.api.RESTServices;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,7 @@ import brooks.api.utility.exceptions.FailureToCreateException;
 import brooks.api.utility.exceptions.GameNotFoundException;
 import brooks.api.utility.exceptions.GameTooLongException;
 import brooks.api.utility.exceptions.NotEnoughItemsException;
+import brooks.api.utility.exceptions.UserNotFoundException;
 
 /**
  * Rest service for game data
@@ -60,6 +66,19 @@ public class GameRestService {
 		}
 		
 		return response;
+	}
+	
+	@GET
+	@Path("/getGames/{id}")
+	@Produces("application/json")
+	public RestResponse<List<GameModel>> getPlayerGames(@PathParam("id") int id)
+	{		
+		try {
+			List<GameModel> list = service.getGames(id);
+			return new RestResponse<List<GameModel>>(1, "OK", list);
+		} catch (UserNotFoundException e) {
+			return new RestResponse<List<GameModel>>(-1, "User could not be found with that id", new ArrayList<GameModel>());
+		}
 	}
 	
 	@Autowired

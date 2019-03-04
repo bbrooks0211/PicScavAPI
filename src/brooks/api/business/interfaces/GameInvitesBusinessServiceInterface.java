@@ -13,4 +13,5 @@ public interface GameInvitesBusinessServiceInterface {
 	public boolean acceptInvite(int id) throws InviteNotFoundException, InviteAlreadyAcceptedException, GameNotFoundException;
 	public boolean declineInvite(int id) throws InviteNotFoundException, InviteAlreadyAcceptedException;
 	public List<GameInviteModel> getInvitesForUser(int id) throws UserNotFoundException;
+	boolean sendListOfInvites(List<GameInviteModel> invites, int gameID) throws GameNotFoundException;
 }

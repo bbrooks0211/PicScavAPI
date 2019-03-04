@@ -11,18 +11,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import brooks.api.business.interfaces.GameBusinessServiceInterface;
+import brooks.api.business.interfaces.GameInvitesBusinessServiceInterface;
 import brooks.api.business.interfaces.GameItemsServiceInterface;
+import brooks.api.business.interfaces.GamePlayerInterface;
 import brooks.api.business.interfaces.ItemReferenceBusinessServiceInterface;
+import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
 import brooks.api.data.interfaces.GameDAOInterface;
+import brooks.api.models.GameInviteModel;
 import brooks.api.models.GameItemModel;
 import brooks.api.models.GameModel;
 import brooks.api.models.ItemModel;
+import brooks.api.models.PlayerModel;
+import brooks.api.models.UserModel;
 import brooks.api.utility.TimeUtility;
 import brooks.api.utility.exceptions.FailureToCreateException;
 import brooks.api.utility.exceptions.GameNotFoundException;
 import brooks.api.utility.exceptions.GameTooLongException;
 import brooks.api.utility.exceptions.NotEnoughItemsException;
+import brooks.api.utility.exceptions.UserNotFoundException;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
 /**
@@ -35,6 +42,9 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	private GameDAOInterface gameDAO;
 	private ItemReferenceBusinessServiceInterface itemService;
 	private GameItemsServiceInterface gameItemsService;
+	private GameInvitesBusinessServiceInterface invitesService;
+	private UserBusinessServiceInterface userService;
+	private GamePlayerInterface playerService;
 	
 	private final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
 
@@ -85,12 +95,31 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 			throw new FailureToCreateException();
 		}
 		
+		//Send the game invites
+		try {
+			boolean allInvitesSent = sendInvitesFromList(game.getPlayers(), gameID, game.getHostID());
+			boolean addedHostToGame = playerService.addPlayerToGame(game.getHostID(), gameID);
+		} catch (GameNotFoundException e) {
+			logger.error("[ERROR] GAME COULD NOT BE FOUND FOR ID OF GAME JUST CREATED (ID: " + gameID + ") \n" + e.getStackTrace());
+		}
+		
 		//Create the game by sending it to the data access layer
 		return true;
 	}
 	
-	public List<GameModel> getGames(int userID) {
+	@Override
+	public List<GameModel> getGames(int userID) throws UserNotFoundException {
+		UserModel user = userService.findByID(userID);
+		
+		if(user.getId() == -1)
+			throw new UserNotFoundException();
+		
 		List<GameModel> list = gameDAO.findAllForID(userID);
+		
+		for(GameModel game : list)
+		{
+			setGameDetails(game);
+		}
 		
 		return list;
 	}
@@ -141,6 +170,29 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return true;
 	}
 	
+	private boolean sendInvitesFromList(List<PlayerModel> list, int gameID, int hostID) throws GameNotFoundException {
+		boolean status = true;
+		if(!gameExists(gameID))
+			throw new GameNotFoundException();
+		
+		for(PlayerModel p : list)
+		{
+			try {
+				invitesService.sendInvite(new GameInviteModel(-1, hostID, gameID, p.getUserID(), 0));
+			} catch (UserNotFoundException e) {
+				logger.error("[ERROR] COULD NOT SEND INVITE BECAUSE USER COULD NOT BE FOUND (ID: " + p.getUserID() + ") \n" + e.getStackTrace() );
+				status = false;
+			}
+		}
+		return status;
+	}
+	
+	private GameModel setGameDetails(GameModel game) {
+		game.setItems(gameItemsService.getItemsForGame(game.getId()));
+		game.setPlayers(playerService.getPlayersForGame(game.getId()));
+		return game;
+	}
+	
 	@Autowired
 	private void setGameDAO(GameDAOInterface dao) {
 		this.gameDAO = dao;
@@ -154,5 +206,20 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	@Autowired
 	public void setGameItemsService(GameItemsServiceInterface service) {
 		this.gameItemsService = service;
+	}
+	
+	@Autowired
+	private void setGameInviteService(GameInvitesBusinessServiceInterface service) {
+		this.invitesService = service;
+	}
+	
+	@Autowired
+	private void setUserService(UserBusinessServiceInterface service) {
+		this.userService = service;
+	}
+	
+	@Autowired
+	private void setPlayerService(GamePlayerInterface service) {
+		this.playerService = service;
 	}
 }

@@ -18,11 +18,21 @@ public class CategoryBusinessService implements CategoryServiceInterface {
 	
 	DataAccessInterface<CategoryModel> categoryDAO;
 
+	/**
+	 * For adding a new category
+	 * @param category The category desired to be added
+	 * @return Boolean
+	 */
 	@Override
 	public boolean createNewCategory(CategoryModel category) {
 		return categoryDAO.create(category);
 	}
 
+	/**
+	 * Find a category by the ID
+	 * @param id The id of the desired category to retrieve
+	 * @return CategoryModel 
+	 */
 	@Override
 	public CategoryModel findByID(int id) throws CategoryDoesNotExistException {
 		CategoryModel category = categoryDAO.findByID(id);
@@ -32,6 +42,11 @@ public class CategoryBusinessService implements CategoryServiceInterface {
 		return category;
 	}
 	
+	/**
+	 * Find a category by it's name
+	 * @param name The name of the category
+	 * @return CategoryModel
+	 */
 	@Override
 	public CategoryModel findByCategoryName(String name) throws CategoryDoesNotExistException {
 		CategoryModel category = categoryDAO.find(new CategoryModel(-1, name, 0));

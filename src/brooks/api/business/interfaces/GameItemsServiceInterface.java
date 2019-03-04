@@ -7,4 +7,5 @@ import brooks.api.models.GameItemModel;
 public interface GameItemsServiceInterface {
 	public boolean create(GameItemModel item);
 	public boolean create(List<GameItemModel> list);
+	List<GameItemModel> getItemsForGame(int gameID);
 }

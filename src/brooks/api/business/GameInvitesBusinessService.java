@@ -43,16 +43,55 @@ public class GameInvitesBusinessService implements GameInvitesBusinessServiceInt
 	 */
 	@Override
 	public boolean sendInvite(GameInviteModel model) throws UserNotFoundException {
-		//Get the id of the user receiving the invite based on the username provided
-		model.setReceiverID(userService.findByUsername(model.getReceiverUsername()).getId());
-		
-		//Check that the user actually exists based on the id
-		if(model.getReceiverID() == -1) {
-			throw new UserNotFoundException();
+		if(model.getReceiverID() > -1)
+		{
+			UserModel user = userService.findByID(model.getReceiverID());
+			if(user.getId() == -1)
+				throw new UserNotFoundException();
 		}
-		
+		else
+		{
+			//Get the id of the user receiving the invite based on the username provided
+			model.setReceiverID(userService.findByUsername(model.getReceiverUsername()).getId());
+			
+			//Check that the user actually exists based on the id
+			if(model.getReceiverID() == -1) {
+				throw new UserNotFoundException();
+			}
+		}
+			
 		//Create the invite and return the result
 		return dao.create(model);
+	}
+	
+	/**
+	 * Sends invites from a list 
+	 * @param invites The list of GameInvites
+	 * @param gameID The id of the game
+	 * @throws GameNotFoundException
+	 */
+	@Override
+	public boolean sendListOfInvites(List<GameInviteModel> invites, int gameID) throws GameNotFoundException {
+		boolean status = true;
+		
+		//Ensure that the game exists for the ID
+		if (!gameService.gameExists(gameID))
+			throw new GameNotFoundException();
+		
+		//Send every invite
+		for(GameInviteModel invite : invites)
+		{
+			try
+			{
+				sendInvite(invite);
+			} catch (UserNotFoundException e) {
+				//If the invite doesn't exist, log the exception and change the status to false
+				logger.error("[ERROR] GameInviteService.sendListOfInvites - CANNOT SEND INVITE TO USER BECAUSE THE USERID IS NOT FOUND (ID: " + invite.getReceiverID() + ")");
+				status = false;
+			}
+		}
+		
+		return status;
 	}
 
 	/**
