@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import brooks.api.business.interfaces.GamePlayerInterface;
 import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.data.interfaces.DataAccessInterface;
+import brooks.api.models.FoundItemModel;
 import brooks.api.models.PlayerModel;
 import brooks.api.models.UserModel;
 
@@ -21,16 +22,44 @@ public class GamePlayerBusinessService implements GamePlayerInterface {
 		
 		for(PlayerModel player : list)
 		{
-			UserModel user = userService.findByID(gameID);
-			player.setUsername(user.getUsername());
+			player = setUsernameForPlayerModel(player);
 		}
 		
 		return list;
 	}
 	
 	@Override
+	public PlayerModel getPlayerByID(int id) {
+		PlayerModel player = dao.findByID(id);
+		player = setUsernameForPlayerModel(player);
+		return player;
+	}
+	
+	@Override
+	public PlayerModel getPlayer(PlayerModel player) {
+		player = dao.find(player);
+		player = setUsernameForPlayerModel(player);
+		return player;
+	}
+	
+	@Override
+	public boolean updatePlayerPoints(PlayerModel player, FoundItemModel item) {
+		player = getPlayer(player);
+		player.setScore(player.getScore() + item.getPoints());
+		boolean status = dao.update(player);
+		
+		return status;
+	}
+	
+	@Override
 	public boolean addPlayerToGame(int userID, int gameID) {
 		return dao.create(new PlayerModel(-1, userID, gameID));
+	}
+	
+	private PlayerModel setUsernameForPlayerModel(PlayerModel player) {
+		UserModel user = userService.findByID(player.getUserID());
+		player.setUsername(user.getUsername());
+		return player;
 	}
 
 	@Autowired

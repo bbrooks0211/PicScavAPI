@@ -25,15 +25,15 @@ import brooks.api.utility.TimeUtility;
  *
  */
 @Controller
-@RequestMapping("/hello")
-public class HelloWorldController 
+@RequestMapping("/test")
+public class TestController 
 {
 	private DataAccessInterface<GameModel> dao;
 	/**
 	 * Simple Hello World Controller that returns a String in the response body
 	 * Invoke using /test1 URI.
 	 */
-	@RequestMapping(path="/test1", method=RequestMethod.GET)		//OR could use @GetMapping("test1")
+	@RequestMapping(path="/test", method=RequestMethod.GET)		//OR could use @GetMapping("test1")
 	@ResponseBody
 	public String printHello()
 	{

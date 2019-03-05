@@ -43,7 +43,18 @@ public class GamePlayerDAO implements DataAccessInterface<PlayerModel>{
 
 	@Override
 	public boolean update(PlayerModel model) {
-		// TODO Auto-generated method stub
+		String sql = "UPDATE gamePlayers SET points=? WHERE id=?";
+		try
+		{
+			int rows = jdbcTemplateObject.update(sql, model.getScore(), model.getId());
+			
+			return rows == 1 ? true : false;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
+		}
+		
 		return false;
 	}
 
@@ -66,14 +77,36 @@ public class GamePlayerDAO implements DataAccessInterface<PlayerModel>{
 
 	@Override
 	public PlayerModel find(PlayerModel model) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM gamePlayers WHERE userID=? AND gameID=?";
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, model.getUserID(), model.getGameID());
+			if(srs.next())
+			{
+				return new PlayerModel(srs.getInt("id"), srs.getInt("userID"), srs.getInt("points"), srs.getInt("gameID"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		return new PlayerModel();
 	}
 
 	@Override
 	public PlayerModel findByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM gamePlayers WHERE id=?";
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			if(srs.next())
+			{
+				return new PlayerModel(srs.getInt("id"), srs.getInt("userID"), srs.getInt("points"), srs.getInt("gameID"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace());
+		}
+		return new PlayerModel();
 	}
 
 	@Override

@@ -164,7 +164,7 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 			list.add(new GameItemModel(-1, gameID, item.getItem(), item.getPoints(), 0, null));
 		}
 		
-		if(!gameItemsService.create(list))
+		if(!gameItemsService.addNewGameItem(list))
 			throw new FailureToCreateException();
 		
 		return true;
@@ -190,6 +190,7 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	private GameModel setGameDetails(GameModel game) {
 		game.setItems(gameItemsService.getItemsForGame(game.getId()));
 		game.setPlayers(playerService.getPlayersForGame(game.getId()));
+		game.setFoundItems(gameItemsService.getFoundItemsForGame(game.getId()));
 		return game;
 	}
 	

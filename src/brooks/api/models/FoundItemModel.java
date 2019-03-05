@@ -26,6 +26,17 @@ public class FoundItemModel {
 		this.username = username;
 		this.imageURL = imageURL;
 	}
+	
+	public FoundItemModel(int id, int gameID, int itemID, int userID, int points, String imageURL) {
+		super();
+		this.id = id;
+		this.gameID = gameID;
+		this.itemID = itemID;
+		this.userID = userID;
+		this.points = points;
+		this.username = "";
+		this.imageURL = imageURL;
+	}
 
 	public FoundItemModel() {
 		super();
@@ -35,6 +46,8 @@ public class FoundItemModel {
 		this.userID = -1;
 		this.points = -1;
 		this.username = "";
+		this.imageURL = "";
+		this.points = 0;
 		this.imageURL = "";
 	}
 
@@ -76,5 +89,21 @@ public class FoundItemModel {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
 	}
 }

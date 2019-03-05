@@ -22,6 +22,15 @@ public class PlayerModel {
 		this.score = score;
 	}
 	
+	public PlayerModel(int id, int userID, int score, int gameID) {
+		super();
+		this.id = id;
+		this.userID = userID;
+		this.gameID = gameID;
+		this.score = score;
+		this.username = "";
+	}
+	
 	public PlayerModel(int id, int userID, int gameID) {
 		super();
 		this.id = id;

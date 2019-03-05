@@ -42,7 +42,18 @@ public class GameItemDAO implements DataAccessInterface<GameItemModel> {
 
 	@Override
 	public boolean update(GameItemModel model) {
-		// TODO Auto-generated method stub
+		String sql = "UPDATE gameItems SET found=1 WHERE id=?";
+		try
+		{
+			int rows = jdbcTemplateObject.update(sql, model.getId());
+			
+			return rows == 1 ? true : false;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error("[ERROR] DATABASE EXCEPTION OCCURRED: " + e.getLocalizedMessage() + "\n ------Stack trace: \n" + e.getStackTrace().toString());
+		}
+		
 		return false;
 	}
 
@@ -60,8 +71,20 @@ public class GameItemDAO implements DataAccessInterface<GameItemModel> {
 
 	@Override
 	public GameItemModel findByID(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT * FROM gameItems WHERE id=?";
+		try
+		{
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql, id);
+			if(srs.next())
+			{
+				GameItemModel item = new GameItemModel(srs.getInt("id"), srs.getInt("gameID"), srs.getString("item"), srs.getInt("points"), srs.getInt("found"), null);
+				return item;
+	
+			}
+		} catch(Exception e) {
+			logger.error("[ERROR] EXCEPTION OCCURRED IN THE DATA ACCESS LAYER: " + e.getLocalizedMessage().toString() + " \n" + e.getStackTrace().toString());
+		}
+		return new GameItemModel();
 	}
 
 	@Override
