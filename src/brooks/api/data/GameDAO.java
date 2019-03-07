@@ -119,7 +119,7 @@ public class GameDAO implements GameDAOInterface {
 
 	@Override
 	public List<GameModel> findAllForID(int id) {
-		String sql1 = "SELECT * FROM gamePlayers WHERE userID=?";
+		String sql1 = "SELECT * FROM gamePlayers WHERE userID=? ORDER BY `id` DESC";
 		List<GameModel> list = new ArrayList<GameModel>();
 		try {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql1, id);
