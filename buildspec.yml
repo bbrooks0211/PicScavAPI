@@ -5,6 +5,7 @@ phases:
         commands:
             - echo 'Building Services App............'
             - ls -lah $CODEBUILD_SRC_DIR
+            - ls -lah $CODEBUILD_SRC_DIR/src/
             - aws s3 cp s3://picscav-sensitive/app.properties $CODEBUILD_SRC_DIR/src/app.properties
             - mvn clean package
             
