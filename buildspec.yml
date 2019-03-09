@@ -13,7 +13,9 @@ phases:
         commands:
             - ls -lah $CODEBUILD_SRC_DIR/src/
             - ls -lah
-            - cd $CODEBUILD_SRC_DIR
+            - cd $CODEBUILD_SRC_DIR/target
+            - ls -lah
+            - cd $CODEBUILD_SRC_DIR/target
             - ls -lah
 artifacts:
     files: '**/*'
