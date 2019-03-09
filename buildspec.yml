@@ -1,7 +1,7 @@
 version: 0.2
 
 phases:
-	pre-build:
+	pre_build:
 		commands:
 			- ls -lah $CODEBUILD_SRC_DIR
             - aws s3 cp s3://picscav-sensitive/app.properties $CODEBUILD_SRC_DIR/src/app.properties
