@@ -9,6 +9,10 @@ phases:
 artifacts:
     files: '**/*'
     base-directory: 'target/PicScavAPI'
+    secondary-artifacts:
+      artifact1:
+      	base-directory: $CODEBUILD_SRC_DIR_s
+      	file: '**/*'
     
 cache:
   paths:
