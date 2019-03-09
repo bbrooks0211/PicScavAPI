@@ -1,14 +1,20 @@
 version: 0.2
 
 phases:
+    pre_build:
+        commands:
+            - aws s3 cp s3://picscav-sensitive/app.properties $CODEBUILD_SRC_DIR/src/app.properties
+            - ls -lah $CODEBUILD_SRC_DIR/src/
     build:
         commands:
             - echo 'Building Services App............'
             - mvn clean package
     post_build:
         commands:
-            - aws s3 cp s3://picscav-sensitive/app.properties $CODEBUILD_SRC_DIR/src/app.properties
             - ls -lah $CODEBUILD_SRC_DIR/src/
+            - ls -lah
+            - cd $CODEBUILD_SRC_DIR
+            - ls -lah
 artifacts:
     files: '**/*'
     base-directory: 'target/PicScavAPI'
