@@ -5,6 +5,7 @@ phases:
         commands:
             - aws s3 cp s3://picscav-sensitive/app.properties $CODEBUILD_SRC_DIR/src/app.properties
             - ls -lah $CODEBUILD_SRC_DIR/src/
+            - ls -lah $CODEBUILD_SRC_DIR/src/
     build:
         commands:
             - echo 'Building Services App............'
@@ -19,7 +20,7 @@ phases:
             - ls -lah
             - cd $CODEBUILD_SRC_DIR/target/PicScavAPI
             - ls -lah
-            - cd $CODEBUILD_SRC_DIR/classes
+            - cd $CODEBUILD_SRC_DIR/target/classes
             - ls -lah
 artifacts:
     files: '**/*'
