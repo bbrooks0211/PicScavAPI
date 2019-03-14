@@ -2,7 +2,7 @@
 <configuration>
 	<appender name="FILE-AUDIT"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/var/log/tomcat8/logs/picscav.log</file>
+		<file>/var/log/tomcat8/picscav.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>
 				%d{yyyy-MM-dd HH:mm:ss} - %msg%n
