@@ -11,7 +11,7 @@ import brooks.api.models.ItemModel;
 import brooks.api.utility.exceptions.ItemAlreadyExistsException;
 
 /**
- * Business service class for getting the items to use as a reference, for things such as generating the item lists for newly created games, etc.
+ * Business service class for getting the items to use as a reference, for things such as generating the item lists for newly created games
  * @author Brendan Brooks
  *
  */
@@ -33,30 +33,54 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 		return itemDAO.create(item);
 	}
 
+	/**
+	 * Update a reference item
+	 * @param item The ItemModel of the item to update
+	 * @return boolean
+	 */
 	@Override
 	public boolean updateItem(ItemModel item) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Delete a reference item by it's ID
+	 * @param id The ID of the item to delete
+	 * @return boolean
+	 */
 	@Override
 	public boolean deleteItem(int id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Get an item by the ItemModel
+	 * @param ItemModel 
+	 * @return ItemModel
+	 */
 	@Override
 	public ItemModel getItem(ItemModel model) {
-		// TODO Auto-generated method stub
 		return itemDAO.find(model);
 	}
 
+	/**
+	 * Get a reference item by the ID
+	 * @param id The ID of the item to be retrieved
+	 * @return ItemModel
+	 */
 	@Override
 	public ItemModel getItem(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Get all items for a category
+	 * @param category The category to get the items for
+	 * @return List of ItemModel's
+	 */
 	@Override
 	public List<ItemModel> getAllForCategory(String category) {
 		//Get the category object from it's name
@@ -67,11 +91,20 @@ public class ItemReferenceBusinessService implements ItemReferenceBusinessServic
 		return itemDAO.findAllByString(category.toLowerCase());
 	}
 	
+	/**
+	 * Get all items for a category's ID
+	 * @param id The ID of the category
+	 * @return List of ItemModels's
+	 */
 	@Override
 	public List<ItemModel> getAllForCategoryID(int id) {
 		return itemDAO.findAllForID(id);
 	}
 
+	/**
+	 * Gets all the items - USE WITH CAUTION
+	 * @return List of all items in the database
+	 */
 	@Override
 	public List<ItemModel> getAllItems() {
 		// TODO Auto-generated method stub

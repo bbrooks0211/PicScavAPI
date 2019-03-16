@@ -107,15 +107,24 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return true;
 	}
 	
+	/**
+	 * Get all the games for a user by their ID
+	 * @param userID The id of the user
+	 * @return List List of GameModels
+	 */
 	@Override
 	public List<GameModel> getGames(int userID) throws UserNotFoundException {
+		//Get the user
 		UserModel user = userService.findByID(userID);
 		
+		//Check that the returned user is a valid one
 		if(user.getId() == -1)
 			throw new UserNotFoundException();
 		
+		//Get all the games for the user
 		List<GameModel> list = gameDAO.findAllForID(userID);
 		
+		//Set the rest of the details for the games
 		for(GameModel game : list)
 		{
 			setGameDetails(game);
@@ -124,11 +133,18 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return list;
 	}
 	
+	/**
+	 * Get a game by the ID
+	 * @param id The ID of the game to be retrieved
+	 * @return GameModel
+	 */
 	@Override
 	public GameModel getGame(int id) throws GameNotFoundException {
+		//Ensure that the game exists
 		if(!gameExists(id))
 			throw new GameNotFoundException();
 		
+		//Return the game
 		return gameDAO.findByID(id);
 	}
 	
@@ -148,6 +164,15 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return true;
 	}
 	
+	/**
+	 * Generates the items for a game being created
+	 * @param gameID
+	 * @param numberOfItems
+	 * @param category
+	 * @return
+	 * @throws FailureToCreateException
+	 * @throws NotEnoughItemsException
+	 */
 	private boolean generateGameItems(int gameID, int numberOfItems, String category) throws FailureToCreateException, NotEnoughItemsException {
 		List<GameItemModel> list = new ArrayList<GameItemModel>();
 		List<ItemModel> fullItemList = new ArrayList<ItemModel>();
@@ -170,6 +195,14 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return true;
 	}
 	
+	/**
+	 * Send invites from a list of users
+	 * @param list
+	 * @param gameID
+	 * @param hostID
+	 * @return boolean 
+	 * @throws GameNotFoundException
+	 */
 	private boolean sendInvitesFromList(List<PlayerModel> list, int gameID, int hostID) throws GameNotFoundException {
 		boolean status = true;
 		if(!gameExists(gameID))
@@ -187,6 +220,11 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		return status;
 	}
 	
+	/**
+	 * 
+	 * @param game The game that needs details set
+	 * @return GameModel The game's model with populated items, players, and found items
+	 */
 	private GameModel setGameDetails(GameModel game) {
 		game.setItems(gameItemsService.getItemsForGame(game.getId()));
 		game.setPlayers(playerService.getPlayersForGame(game.getId()));
