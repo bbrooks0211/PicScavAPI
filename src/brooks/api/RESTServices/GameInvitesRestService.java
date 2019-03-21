@@ -20,6 +20,11 @@ import brooks.api.utility.exceptions.InviteAlreadyAcceptedException;
 import brooks.api.utility.exceptions.InviteNotFoundException;
 import brooks.api.utility.exceptions.UserNotFoundException;
 
+/**
+ * REST Service for managing game invites
+ * @author Brendan Brooks
+ *
+ */
 @Path("/game")
 @Service
 public class GameInvitesRestService {
