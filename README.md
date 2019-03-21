@@ -3,7 +3,7 @@
 </p>
 
 # PicScavAPI
-Server-side API for PicScav (Not yet on the App Store)
+Server-side API for PicScav (Not yet on the App Store). Code for iOS not yet ready to be made public.
 
 Created by Brendan Brooks ([Website](http://www.brendanbrooks.net/))
 
