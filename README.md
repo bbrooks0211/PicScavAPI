@@ -8,13 +8,15 @@ Server-side API for PicScav (Not yet on the App Store). Code for iOS not yet rea
 Created by Brendan Brooks ([Website](http://www.brendanbrooks.net/))
 
 # Overview
+PicScav is a scavenger-hunt app where friends can invite each other and play together. They can then take a picture of a found item and get points for it, and once one person has found that item, no one else can.
+
 At a very high level, this is the code for the server of the PicScav iOS App, represented by the Java Spring section below:
 
 ![alt text](http://www.brendanbrooks.net/wp-content/uploads/2019/03/LogicalSolution.png "Architecture")
 
 ## Technologies Used In This Project
 ### Java
-* Spring Framework
+* Spring MVC
 * JDBC
 * Connection Pooling
 * Spring Security
