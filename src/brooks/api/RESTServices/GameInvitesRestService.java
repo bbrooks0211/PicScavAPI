@@ -101,6 +101,8 @@ public class GameInvitesRestService {
 }
 
 /*
+Copyright 2019, Brendan Brooks.  
+
 This file is part of PicScav.
 
 PicScav is free software: you can redistribute it and/or modify
