@@ -46,10 +46,13 @@ aws.cred2 = token2
 basic.user = http_basic_username
 basic.pass = http_basic_password
 ```
-### aws.cred1 & aws.cred2
+### db.url, db.user, db.pass
+Database connectivity info. Must be a MySQL database.
+
+### aws.cred1, aws.cred2
 These are the tokens to access the S3 bucket to store images uploaded to the app.
 
-### basic.user & basic.pass
+### basic.user, basic.pass
 The desired username and password for the HTTP Basic configuration
 
 ## Database Diagram
