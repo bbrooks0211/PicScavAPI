@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import brooks.api.business.interfaces.GameItemsServiceInterface;
 import brooks.api.models.FoundItemModel;
 import brooks.api.models.RestResponse;
+import brooks.api.utility.exceptions.ItemAlreadyFoundException;
 import brooks.api.utility.interfaces.s3UtilityInterface;
 
 /**
@@ -49,7 +50,13 @@ public class FileUploadRestService {
 		item.setImageURL(filePathAndName);
 		s3.uploadFile(filePathAndName, file);
 		
-		boolean status = itemsService.addFoundItem(item);
+		boolean status = false;
+		
+		try {
+			status = itemsService.addFoundItem(item);
+		} catch (ItemAlreadyFoundException e) {
+			return new RestResponse<Boolean>(-1, "Item was already found", Boolean.valueOf(false)); 
+		}
 		
 		if(status)
 		{

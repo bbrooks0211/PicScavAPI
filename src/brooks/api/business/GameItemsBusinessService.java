@@ -14,6 +14,7 @@ import brooks.api.models.FoundItemModel;
 import brooks.api.models.GameItemModel;
 import brooks.api.models.PlayerModel;
 import brooks.api.models.UserModel;
+import brooks.api.utility.exceptions.ItemAlreadyFoundException;
 import brooks.api.utility.interceptors.LoggingInterceptor;
 
 
@@ -40,8 +41,12 @@ public class GameItemsBusinessService implements GameItemsServiceInterface {
 	 * @return boolean
 	 */
 	@Override
-	public boolean addFoundItem(FoundItemModel item) {
+	public boolean addFoundItem(FoundItemModel item) throws ItemAlreadyFoundException {
 		item = setOtherFoundItemInfo(item);
+		
+		if (itemAlreadyFound(item))
+			throw new ItemAlreadyFoundException();
+		
 		//Get the referenced game item and set the ID
 		GameItemModel referencedItem = new GameItemModel();
 		referencedItem.setId(item.getItemID());
@@ -141,6 +146,26 @@ public class GameItemsBusinessService implements GameItemsServiceInterface {
 		//Set the username for who found the item
 		item.setUsername(user.getUsername());
 		return item;
+	}
+	
+	/**
+	 * 
+	 * @param item
+	 * @return
+	 */
+	private boolean itemAlreadyFound(FoundItemModel item) {
+		if (item.getGameID() == -1)
+			return false;
+		
+		List<FoundItemModel> foundItems = getFoundItemsForGame(item.getGameID());
+		
+		for (FoundItemModel f : foundItems) {
+			if (f.getItemID() == item.getItemID()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	@Autowired
