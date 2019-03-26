@@ -10,11 +10,10 @@ import brooks.api.utility.exceptions.NotEnoughItemsException;
 import brooks.api.utility.exceptions.UserNotFoundException;
 
 public interface GameBusinessServiceInterface {
+	
 	public boolean createNewGame(GameModel game) throws GameTooLongException, GameNotFoundException, FailureToCreateException, NotEnoughItemsException;
-
 	boolean gameExists(int id);
-
 	GameModel getGame(int id) throws GameNotFoundException;
-
 	List<GameModel> getGames(int userID) throws UserNotFoundException;
+	List<GameModel> getCurrentGames(int userID) throws UserNotFoundException;
 }

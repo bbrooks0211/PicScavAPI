@@ -35,6 +35,8 @@ public class FileUploadRestService {
 	 * @param itemID
 	 * @param userID
 	 * @return RestResponse with Boolean value
+	 * 
+	 * TODO: Fix so that it uses an object model instead of a bunch of parameters
 	 */
 	@PostMapping(value = "/gameImageUpload", consumes = "multipart/form-data")
 	public RestResponse<Boolean> imageUpload(@RequestParam(value="file") MultipartFile file, @RequestParam(value="gameID") int gameID, @RequestParam(value="itemID") int itemID, @RequestParam(value="userID") int userID) 
