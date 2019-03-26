@@ -69,6 +69,19 @@ public class GameRestService {
 	}
 	
 	@GET
+	@Path("/getGame/{id}")
+	@Produces("application/json")
+	public RestResponse<GameModel> getGame(@PathParam("id") int id)
+	{		
+			try {
+				GameModel game = service.getGame(id);
+				return new RestResponse<GameModel>(1, "OK", game);
+			} catch (GameNotFoundException e) {
+				return new RestResponse<GameModel>(-1, "Game could not be found with that id", new GameModel());
+			}
+	}
+	
+	@GET
 	@Path("/getGames/{id}")
 	@Produces("application/json")
 	public RestResponse<List<GameModel>> getPlayerGames(@PathParam("id") int id)

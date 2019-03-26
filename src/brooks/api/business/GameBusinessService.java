@@ -171,8 +171,12 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 		if(!gameExists(id))
 			throw new GameNotFoundException();
 		
+		GameModel game = gameDAO.findByID(id);
+		
+		game = setGameDetails(game);
+		
 		//Return the game
-		return gameDAO.findByID(id);
+		return game;
 	}
 	
 	/**
