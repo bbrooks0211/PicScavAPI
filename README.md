@@ -2,7 +2,7 @@
   <img src="http://www.brendanbrooks.net/wp-content/uploads/2019/03/picscav-logo-main-400.png">
 </p>
 
-# PicScavAPI
+# PicScav API
 Server-side API for PicScav (Not yet on the App Store). Code for iOS not yet ready to be made public.
 
 Created by Brendan Brooks ([Website](http://www.brendanbrooks.net/))
