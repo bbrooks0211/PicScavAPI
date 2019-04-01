@@ -62,4 +62,5 @@ The desired username and password for the HTTP Basic configuration
 
 # More info
 More info, including the full design spec, can be found [here](http://www.brendanbrooks.net/picscav/)
+
 JavaDoc can be browsed [here](http://www.brendanbrooks.net/PicScavJavaDoc/)
