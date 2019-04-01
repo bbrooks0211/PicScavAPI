@@ -14,13 +14,21 @@ import brooks.api.business.interfaces.ItemReferenceBusinessServiceInterface;
 import brooks.api.models.ItemModel;
 import brooks.api.utility.exceptions.ItemAlreadyExistsException;
 
-
+/**
+ * Controller for the administrative UI
+ * @author Brendan Brooks
+ *
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
+
 	ItemReferenceBusinessServiceInterface itemService;
 	
+	/**
+	 * Displays the admin page
+	 * @return ModelAndView
+	 */
 	@RequestMapping(path= { "/", "/main" }, method=RequestMethod.GET)
 	public ModelAndView displayAdminPage() {
 		ModelAndView mv = new ModelAndView();
@@ -29,8 +37,14 @@ public class AdminController {
 		return mv;
 	}
 	
+	/**
+	 * adds an item
+	 * @param item
+	 * @param result
+	 * @return ModelAndView
+	 */
 	@RequestMapping(path="/addItem", method=RequestMethod.POST)
-	public ModelAndView loginUser(@Valid @ModelAttribute("item")ItemModel item, BindingResult result) {
+	public ModelAndView addItem(@Valid @ModelAttribute("item")ItemModel item, BindingResult result) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect: main");
 		item.setCreatorID(1);
@@ -51,6 +65,10 @@ public class AdminController {
 		return mv;
 	}
 	
+	/**
+	 * Displays admin login UI
+	 * @return ModelAndView
+	 */
 	@RequestMapping(path="/login", method=RequestMethod.GET)
 	public ModelAndView displayLogin() {
 		ModelAndView mv = new ModelAndView();
@@ -58,6 +76,10 @@ public class AdminController {
 		return mv;
 	}
 	
+	/**
+	 * POST request for logging in
+	 * @return ModelAndView
+	 */
 	@RequestMapping(path="/sendLoginRequest", method=RequestMethod.POST)
 	public ModelAndView loginUser() {
 		ModelAndView mv = new ModelAndView();
@@ -69,6 +91,8 @@ public class AdminController {
 	public void setItemService(ItemReferenceBusinessServiceInterface service) {
 		this.itemService = service;
 	}
+	
+	
 }
 
 /*
