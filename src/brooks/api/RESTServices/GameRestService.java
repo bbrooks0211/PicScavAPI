@@ -107,6 +107,19 @@ public class GameRestService {
 		}
 	}
 	
+	@GET
+	@Path("/getPastGames/{id}")
+	@Produces("application/json")
+	public RestResponse<List<GameModel>> getPastGames(@PathParam("id") int id)
+	{		
+		try {
+			List<GameModel> list = service.getPastGames(id);
+			return new RestResponse<List<GameModel>>(1, "OK", list);
+		} catch (UserNotFoundException e) {
+			return new RestResponse<List<GameModel>>(-1, "User could not be found with that id", new ArrayList<GameModel>());
+		}
+	}
+	
 	@Autowired
 	@SuppressWarnings("static-access")
 	public void setGameBusinessService(GameBusinessServiceInterface service) {

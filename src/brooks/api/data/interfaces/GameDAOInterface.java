@@ -19,4 +19,7 @@ public interface GameDAOInterface extends DataAccessInterface<GameModel> {
 	 * @return List
 	 */
 	public List<GameModel> getCurentGames(int id);
+
+
+	List<GameModel> getPastGames(int id);
 }

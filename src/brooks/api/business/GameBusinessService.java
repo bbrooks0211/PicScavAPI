@@ -161,6 +161,32 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 	}
 	
 	/**
+	 * Get all current games for a user by their ID
+	 * @param userID The id of the user
+	 * @return List List of GameModels
+	 */
+	@Override
+	public List<GameModel> getPastGames(int userID) throws UserNotFoundException {
+		//Get the user
+		UserModel user = userService.findByID(userID);
+		
+		//Check that the returned user is a valid one
+		if(user.getId() == -1)
+			throw new UserNotFoundException();
+		
+		//Get all the games for the user
+		List<GameModel> list = gameDAO.getPastGames(userID);
+		
+		//Set the rest of the details for the games
+		for(GameModel game : list)
+		{
+			setGameDetails(game);
+		}
+		
+		return list;
+	}
+	
+	/**
 	 * Get a game by the ID
 	 * @param id The ID of the game to be retrieved
 	 * @return GameModel

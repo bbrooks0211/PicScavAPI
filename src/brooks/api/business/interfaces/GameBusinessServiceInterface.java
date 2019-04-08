@@ -16,4 +16,5 @@ public interface GameBusinessServiceInterface {
 	GameModel getGame(int id) throws GameNotFoundException;
 	List<GameModel> getGames(int userID) throws UserNotFoundException;
 	List<GameModel> getCurrentGames(int userID) throws UserNotFoundException;
+	List<GameModel> getPastGames(int userID) throws UserNotFoundException;
 }

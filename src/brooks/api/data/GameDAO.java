@@ -172,6 +172,30 @@ public class GameDAO implements GameDAOInterface {
 		
 		return list;
 	}
+	
+	@Override
+	public List<GameModel> getPastGames(int id) {
+		String sql1 = "SELECT * FROM gamePlayers WHERE userID=? ORDER BY `id` DESC";
+		List<GameModel> list = new ArrayList<GameModel>();
+		try {
+			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql1, id);
+			while(srs.next())
+			{
+				String sql = "SELECT * FROM games WHERE endTime < sysdate() AND id=?";
+				SqlRowSet srs1 = jdbcTemplateObject.queryForRowSet(sql, srs.getInt("gameID"));
+				
+				if(srs1.next())
+				{
+					GameModel game = new GameModel(srs1.getInt("id"), srs1.getInt("hostID"), srs1.getString("lobbyName"), srs1.getString("category"), srs1.getLong("timeLimit"), srs1.getTimestamp("endTime"), srs1.getTimestamp("startTime"));
+					list.add(game);
+				}
+			}
+		} catch(Exception e) {
+			logger.error("[ERROR] AN EXCEPTION OCCURRED IN THE DATA ACCESS LAYER \n" + e.getLocalizedMessage().toString() + "\n" + e.getStackTrace().toString());
+		}
+		
+		return list;
+	}
 
 	@Override
 	public List<GameModel> findAllByString(String string) {
