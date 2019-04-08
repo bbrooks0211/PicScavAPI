@@ -29,7 +29,7 @@ public class ItemReferenceDAO implements DataAccessInterface<ItemModel> {
 		
 		try
 		{
-			int rows = jdbcTemplateObject.update(sql, model.getItem(), model.getPoints(), model.getCreatorID());
+			int rows = jdbcTemplateObject.update(sql, model.getCategory(), model.getItem(), model.getPoints(), model.getCreatorID());
 			
 			return rows == 1 ? true : false;
 		} catch(Exception e) {
