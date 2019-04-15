@@ -1,5 +1,8 @@
 package brooks.api.controllers;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import brooks.api.business.interfaces.ItemReferenceBusinessServiceInterface;
+import brooks.api.business.interfaces.UserBusinessServiceInterface;
 import brooks.api.models.ItemModel;
+import brooks.api.models.LoginModel;
+import brooks.api.models.UserModel;
 import brooks.api.utility.exceptions.ItemAlreadyExistsException;
 
 /**
@@ -24,6 +30,10 @@ import brooks.api.utility.exceptions.ItemAlreadyExistsException;
 public class AdminController {
 
 	ItemReferenceBusinessServiceInterface itemService;
+	UserBusinessServiceInterface userService;
+	
+	@Autowired
+	private HttpSession httpSession;
 	
 	/**
 	 * Displays the admin page
@@ -31,7 +41,15 @@ public class AdminController {
 	 */
 	@RequestMapping(path= { "/", "/main" }, method=RequestMethod.GET)
 	public ModelAndView displayAdminPage() {
+		
 		ModelAndView mv = new ModelAndView();
+		UserModel user = (UserModel) httpSession.getAttribute("user");
+		
+		if (user == null || user.getId() == -1) {
+			mv.setViewName("redirect: login");
+			return mv;
+		}
+		
 		mv.setViewName("admin");
 		mv.addObject("item", new ItemModel());
 		return mv;
@@ -72,6 +90,8 @@ public class AdminController {
 	@RequestMapping(path="/login", method=RequestMethod.GET)
 	public ModelAndView displayLogin() {
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("user", new LoginModel());
+		mv.setViewName("adminLogin");
 		
 		return mv;
 	}
@@ -81,15 +101,32 @@ public class AdminController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(path="/sendLoginRequest", method=RequestMethod.POST)
-	public ModelAndView loginUser() {
+	public ModelAndView loginUser(@Valid @ModelAttribute("user")LoginModel model, BindingResult result) {
 		ModelAndView mv = new ModelAndView();
+		UserModel user = new UserModel();
+		try {
+			user = userService.loginUser(model);
+		} catch (UnsupportedEncodingException e) {
+			mv.setViewName("redirect: login");
+			return mv;
+		}
 		
+		if (user.getId() != -1) {
+			httpSession.setAttribute("user", user);
+		}
+		
+		mv.setViewName("redirect: main");
 		return mv;
 	}
 	
 	@Autowired
 	public void setItemService(ItemReferenceBusinessServiceInterface service) {
 		this.itemService = service;
+	}
+	
+	@Autowired
+	public void setUserService(UserBusinessServiceInterface service) {
+		this.userService = service;
 	}
 	
 	
