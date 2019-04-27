@@ -18,8 +18,8 @@ public interface GameDAOInterface extends DataAccessInterface<GameModel> {
 	 * @param id The user ID
 	 * @return List
 	 */
-	public List<GameModel> getCurentGames(int id);
+	public List<GameModel> getCurrentGames(int id);
 
 
-	List<GameModel> getPastGames(int id);
+	List<GameModel> getPastGames(int id, int num);
 }

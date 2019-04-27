@@ -150,7 +150,7 @@ public class GameDAO implements GameDAOInterface {
 	}
 
 	@Override
-	public List<GameModel> getCurentGames(int id) {
+	public List<GameModel> getCurrentGames(int id) {
 		String sql1 = "SELECT * FROM gamePlayers WHERE userID=? ORDER BY `id` DESC";
 		List<GameModel> list = new ArrayList<GameModel>();
 		try {
@@ -174,8 +174,8 @@ public class GameDAO implements GameDAOInterface {
 	}
 	
 	@Override
-	public List<GameModel> getPastGames(int id) {
-		String sql1 = "SELECT * FROM gamePlayers WHERE userID=? ORDER BY `id` DESC";
+	public List<GameModel> getPastGames(int id, int num) {
+		String sql1 = "SELECT * FROM gamePlayers WHERE userID=? ORDER BY `id` DESC LIMIT " + num;
 		List<GameModel> list = new ArrayList<GameModel>();
 		try {
 			SqlRowSet srs = jdbcTemplateObject.queryForRowSet(sql1, id);

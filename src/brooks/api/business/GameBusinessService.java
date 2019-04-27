@@ -149,7 +149,7 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 			throw new UserNotFoundException();
 		
 		//Get all the games for the user
-		List<GameModel> list = gameDAO.getCurentGames(userID);
+		List<GameModel> list = gameDAO.getCurrentGames(userID);
 		
 		//Set the rest of the details for the games
 		for(GameModel game : list)
@@ -175,7 +175,7 @@ public class GameBusinessService implements GameBusinessServiceInterface {
 			throw new UserNotFoundException();
 		
 		//Get all the games for the user
-		List<GameModel> list = gameDAO.getPastGames(userID);
+		List<GameModel> list = gameDAO.getPastGames(userID, 12);
 		
 		//Set the rest of the details for the games
 		for(GameModel game : list)
